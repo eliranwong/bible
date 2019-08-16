@@ -1686,10 +1686,9 @@ class BibleVerseParser {
     var taggedText = "$text ";
 
     // remove bcv tags, if any, to avoid duplication of tagging in later steps
-    var p = RegExp('<ref onclick="bcv\([0-9]+?,[0-9]+?,[0-9][^\(\)]*?\)">(.*?)</ref>', multiLine: true);
+    var p = RegExp(r'<ref onclick="bcv\([^\(\)]*?\)">(.*?)</ref>', multiLine: true);
     while (p.hasMatch(taggedText)) {
-      print("hello hello");
-	  taggedText = replaceAllSmart(taggedText, p, r'\1');
+      taggedText = replaceAllSmart(taggedText, p, r'\1');
     }
 
     // search for books; mark them with book numbers, used by https://marvel.bible
@@ -1720,8 +1719,6 @@ class BibleVerseParser {
 
       // search & replace for marking book
       taggedText = replaceAllSmart(taggedText, RegExp('($bookString) ([0-9])', multiLine: true), '『$booknumber｜\\1』 \\2');
-      //print(bookString);
-      //print(booknumber);
     }
     return taggedText;
   }
