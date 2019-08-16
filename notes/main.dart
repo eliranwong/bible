@@ -1,11 +1,20 @@
 import 'package:cli/cli.dart' as cli;
+import 'package:cli/BibleVerseParser.dart';
 
 main(List<String> arguments) {
   // try command "bin/main.dart testing arguments"
   print(arguments);
+  getParser();
 }
 
-useFunctionsInLibFolder() {
+getParser() {
+  var parser = BibleVerseParser("ENG");
+  //print(parser.standardAbbreviation);
+  //print(parser.bcvToVerseReference(43, 3, 16));
+  print(parser.parseText("John 3:16"));
+}
+
+useFunctionsInLibFolderFile() {
   print('Hello world: ${cli.calculate()}!');
 }
 
