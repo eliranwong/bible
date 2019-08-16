@@ -4,14 +4,14 @@ import 'package:cli/BibleVerseParser.dart';
 main(List<String> arguments) {
   // try command "bin/main.dart testing arguments"
   print(arguments);
-  getParser();
 }
 
 getParser() {
   var parser = BibleVerseParser("ENG");
-  //print(parser.standardAbbreviation);
+  print(parser.standardAbbreviation);
   print(parser.bcvToVerseReference(43, 3, 16));
-  print(parser.parseText('<ref onclick="bcv(64,1,10)">3 Jn. 1:10</ref>'));
+  print(parser.parseText('<ref onclick="bcv(1,1,1)">3 Jn. 10</ref>, 11; Rom 3:23, 24; 8:1-3'));
+  print(parser.extractAllReferences('<ref onclick="bcv(1,1,1)">3 Jn. 10</ref>, 11; Rom 3:23, 24; 8:1-3'));
 }
 
 useFunctionsInLibFolderFile() {
@@ -58,7 +58,7 @@ getSubList() {
   
   // take away the last item
   // python3-equivalent: list1[:-1]
-  List list3 = list1.sublist(0, (list1.length -1));
+  List list3 = list1.sublist(0, (list1.length - 1));
   print(list3);
   
   // take away both ends
@@ -103,6 +103,8 @@ testRegularExpression() {
   print(replaceAllSmart(aString, RegExp(r"(Testing).*?\1"), r"Replaced with \1 ONLY"));
   print(replaceAllSmart(aString, RegExp(r"(T).*?(t).*?(g)"), r"\1\2\3"));
   print(replaceAllSmart(aString, RegExp(r"(T).*?(s).*?(i).*?(g).*?(r).*?(e).*?(g).*?(u).*?(l).*?(a).*?(r)"), r"\11"));
+  var addedText = "ADDED_TEXT";
+  print(replaceAllSmart(aString, RegExp(r"(T).*?(s).*?(i).*?(g).*?(r).*?(e).*?(g).*?(u).*?(l).*?(a).*?(r)"), "$addedText \\11"));
 
   // other usage with "replaceAllMapped" method:
   print(aString.replaceAllMapped(RegExp(r"([a-z])"), (match) => "${match[1].toUpperCase()}"));
@@ -145,6 +147,7 @@ moreStringExamples() {
   print(aString.trimRight());
   print(aString.substring(3));
   print(aString.substring(3, 7));
+  print(aString);
   
   print("Both single quotation mark ' and double quotation mark ${'"'} in a single string");
 }
