@@ -3,7 +3,6 @@ import 'package:cli/cli.dart' as cli;
 main(List<String> arguments) {
   // try command "bin/main.dart testing arguments"
   print(arguments);
-  moreStringExamples();
 }
 
 useFunctionsInLibFolder() {
