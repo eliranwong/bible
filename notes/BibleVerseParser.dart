@@ -1685,12 +1685,12 @@ class BibleVerseParser {
     // this extra space will be removed when parsing is finished.
     var taggedText = "$text ";
 
-    /* TODO_LATER
     // remove bcv tags, if any, to avoid duplication of tagging in later steps
-    p = re.compile('<ref onclick="bcv\([0-9]+?,[0-9]+?,[0-9][^\(\)]*?\)">', flags=re.M);
-    if p.search(taggedText):;
-      taggedText = re.sub('<ref onclick="bcv\([0-9]+?,[0-9]+?,[0-9][^\(\)]*?\)">(.*?)</ref>', r'\1', taggedText, flags=re.M);
-    */
+    var p = RegExp('<ref onclick="bcv\([0-9]+?,[0-9]+?,[0-9][^\(\)]*?\)">(.*?)</ref>', multiLine: true);
+    while (p.hasMatch(taggedText)) {
+      print("hello hello");
+	  taggedText = replaceAllSmart(taggedText, p, r'\1');
+    }
 
     // search for books; mark them with book numbers, used by https://marvel.bible
     // sorting books by alphabet
@@ -1704,7 +1704,7 @@ class BibleVerseParser {
       
       // TODO_LATER
       var searchReplace = [
-        [RegExp('\.'), r'[\.]*?'], // make dot "." optional for an abbreviation
+        ['.', r'[\.]*?'], // make dot "." optional for an abbreviation
         [RegExp('^([0-9]+?) '), r'\1[ ]*?'], // make space " " optional in some cases
         [RegExp('^([I]+?) '), r'\1[ ]*?'],
         [RegExp('^(IV) '), r'\1[ ]*?'],
@@ -1712,17 +1712,16 @@ class BibleVerseParser {
       for (var i in searchReplace) {
         var search = i[0];
         var replace = i[1];
-        //bookString = replaceAllSmart(bookString, search, replace);
-        bookString = bookString.replaceAll(search, replace);
+        bookString = replaceAllSmart(bookString, search, replace);
       }
-      //
 
       // get assigned book number from dictionary
       var booknumber = this.marvelBibleBookNo[book];
+
       // search & replace for marking book
-      taggedText = replaceAllSmart(taggedText, RegExp('($bookString) ([0-9])', multiLine: true), r'『$booknumber｜\1』 \2');
-      print(bookString);
-      print(booknumber);
+      taggedText = replaceAllSmart(taggedText, RegExp('($bookString) ([0-9])', multiLine: true), '『$booknumber｜\\1』 \\2');
+      //print(bookString);
+      //print(booknumber);
     }
     return taggedText;
   }

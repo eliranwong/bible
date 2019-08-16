@@ -11,7 +11,7 @@ getParser() {
   var parser = BibleVerseParser("ENG");
   //print(parser.standardAbbreviation);
   //print(parser.bcvToVerseReference(43, 3, 16));
-  print(parser.parseText("John 3:16"));
+  print(parser.parseText('<ref onclick="bcv(64,1,10)">3 Jn. 1:10</ref>'));
 }
 
 useFunctionsInLibFolderFile() {
