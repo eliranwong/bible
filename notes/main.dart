@@ -8,8 +8,10 @@ main(List<String> arguments) {
 
 getParser() {
   var parser = BibleVerseParser("ENG");
-  print(parser.standardAbbreviation);
+  //print(parser.standardAbbreviation);
   print(parser.bcvToVerseReference(43, 3, 16));
+  print(parser.bcvToVerseReference(43, 3, 16, 3, 18));
+  print(parser.bcvToVerseReference(43, 3, 16, 4, 2));
   print(parser.parseText('<ref onclick="bcv(1,1,1)">3 Jn. 10</ref>, 11; Rom 3:23, 24; 8:1-3'));
   print(parser.extractAllReferences('<ref onclick="bcv(1,1,1)">3 Jn. 10</ref>, 11; Rom 3:23, 24; 8:1-3'));
 }
