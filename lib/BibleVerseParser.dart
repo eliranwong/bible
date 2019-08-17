@@ -1,3 +1,5 @@
+import 'RegexHelper.dart';
+
 class BibleVerseParser {
 
   Map<String, String> standardAbbreviation = {};
@@ -1650,12 +1652,6 @@ class BibleVerseParser {
     "Числа": "4",
   };
 
-  // regular expression helpers
-  var searchReplace = [];
-  var searchPattern;
-  replacement(String pattern) => (Match match) => pattern.replaceAllMapped(new RegExp(r'\\(\d+)'), (m) => match[int.parse(m[1])]);
-  replaceAllSmart(String source, Pattern pattern, String replacementPattern) => source.replaceAllMapped(pattern, replacement(replacementPattern));
-
   // constructor
   BibleVerseParser(String standardAbbreviation) {
     // set standard abbreviation
@@ -1681,14 +1677,22 @@ class BibleVerseParser {
   }
 
   parseText(String text) {
+
+    // setup regexHelper
+    var regex = RegexHelper();
+
     // add a space at the end of the text, to avoid indefinite loop in later steps
     // this extra space will be removed when parsing is finished.
     var taggedText = "$text ";
 
     // remove bcv tags, if any, to avoid duplication of tagging in later steps
-    this.searchPattern = RegExp(r'<ref onclick="bcv\([^\(\)]*?\)">(.*?)</ref>', multiLine: true);
-    while (this.searchPattern.hasMatch(taggedText)) {
-      taggedText = replaceAllSmart(taggedText, this.searchPattern, r'\1');
+    regex.patternString = r'<ref onclick="bcv\([^\(\)]*?\)">(.*?)</ref>';
+    regex.searchPattern = RegExp(regex.patternString, multiLine: true);
+    while (regex.searchPattern.hasMatch(taggedText)) {
+      regex.searchReplace = [
+        [regex.patternString, r'\1'],
+      ];
+      taggedText = regex.doSearchReplace(taggedText, multiLine: true);
     }
 
     // search for books; mark them with book numbers, used by https://marvel.bible
@@ -1700,28 +1704,26 @@ class BibleVerseParser {
     for (var book in sortedBooks) {
       // get the string of book name
       var bookString = book;
-      
-      // TODO_LATER
-      this.searchReplace = [
+
+      regex.searchReplace = [
         ['\\.', r'[\.]*?'], // make dot "." optional for an abbreviation
         ['^([0-9]+?) ', r'\1[ ]*?'], // make space " " optional in some cases
         ['^([I]+?) ', r'\1[ ]*?'],
         ['^(IV) ', r'\1[ ]*?'],
       ];
-      for (var i in this.searchReplace) {
-        var search = i[0];
-        var replace = i[1];
-        bookString = replaceAllSmart(bookString, RegExp(search), replace);
-      }
+      bookString = regex.doSearchReplace(bookString);
 
       // get assigned book number from dictionary
       var booknumber = this.marvelBibleBookNo[book];
 
       // search & replace for marking book
-      taggedText = replaceAllSmart(taggedText, RegExp('($bookString) ([0-9])', multiLine: true), '『$booknumber｜\\1』 \\2');
+      regex.searchReplace = [
+        ['($bookString) ([0-9])', '『$booknumber｜\\1』 \\2'],
+      ];
+      taggedText = regex.doSearchReplace(taggedText, multiLine: true);
     }
 
-    this.searchReplace = [
+    regex.searchReplace = [
       // add first set of taggings:
       ['『([0-9]+?)｜([^『』]*?)』 ([0-9]+?):([0-9]+?)([^0-9])', r'<ref onclick="bcv(\1,\3,\4)">\2 \3:\4</ref｝\5'],
       ['『([0-9]+?)｜([^『』]*?)』 ([0-9]+?)([^0-9])', r'<ref onclick="bcv(\1,\3,)">\2 \3</ref｝\4'],
@@ -1731,48 +1733,40 @@ class BibleVerseParser {
       // fix references of chapters without verse number; assign verse number 1 in taggings
       [r'<ref onclick="bcv\(([0-9]+?),([0-9]+?),\)">', r'<ref onclick="bcv(\1,\2,1)">＊'],
     ];
-    for (var i in this.searchReplace) {
-      var search = i[0];
-      var replace = i[1];
-      taggedText = replaceAllSmart(taggedText, RegExp(search, multiLine: true), replace);
-    }
+    taggedText = regex.doSearchReplace(taggedText, multiLine: true);
 
     // check if verses following tagged references, e.g. Book 1:1-2:1; 3:2-4, 5; Jude 1
-    this.searchPattern = RegExp('</ref｝[,-–;][ ]*?[0-9]', multiLine: true);
-    while (this.searchPattern.hasMatch(taggedText)) {
-      this.searchReplace = [
+    regex.searchPattern = RegExp('</ref｝[,-–;][ ]*?[0-9]', multiLine: true);
+    while (regex.searchPattern.hasMatch(taggedText)) {
+      regex.searchReplace = [
         [r'<ref onclick="bcv\(([0-9]+?),([0-9]+?),([0-9]+?)\)">([^｝]*?)</ref｝([,-–;][ ]*?)([0-9]+?):([0-9]+?)([^0-9])', r'<ref onclick="bcv(\1,\2,\3)">\4</ref｝\5<ref onclick="bcv(\1,\6,\7)">\6:\7</ref｝\8'],
         [r'<ref onclick="bcv\(([0-9]+?),([0-9]+?),([0-9]+?)\)">([^＊][^｝]*?)</ref｝([,-–;][ ]*?)([0-9]+?)([^:0-9])', r'<ref onclick="bcv(\1,\2,\3)">\4</ref｝\5<ref onclick="bcv(\1,\2,\6)">\6</ref｝\7'],
         [r'<ref onclick="bcv\(([0-9]+?),([0-9]+?),([0-9]+?)\)">([^＊][^｝]*?)</ref｝([,-–;][ ]*?)([0-9]+?):([^0-9])', r'<ref onclick="bcv(\1,\2,\3)">\4</ref｝\5<ref onclick="bcv(\1,\2,\6)">\6</ref｝:\7'],
         [r'<ref onclick="bcv\(([0-9]+?),([0-9]+?),([0-9]+?)\)">(＊[^｝]*?)</ref｝([,-–;][ ]*?)([0-9]+?)([^:0-9])', r'<ref onclick="bcv(\1,\2,\3)">\4</ref｝\5<ref onclick="bcv(\1,\6,1)">＊\6</ref｝\7'],
         [r'<ref onclick="bcv\(([0-9]+?),([0-9]+?),([0-9]+?)\)">(＊[^｝]*?)</ref｝([,-–;][ ]*?)([0-9]+?):([^0-9])', r'<ref onclick="bcv(\1,\2,\3)">\4</ref｝\5<ref onclick="bcv(\1,\6,1)">＊\6</ref｝:\7'],
       ];
-      for (var i in this.searchReplace) {
-        var search = i[0];
-        var replace = i[1];
-        taggedText = replaceAllSmart(taggedText, RegExp(search, multiLine: true), replace);
-      }
+      taggedText = regex.doSearchReplace(taggedText, multiLine: true);
     }
 
     // clear special markers
-    this.searchReplace = [
+    regex.searchReplace = [
       ['『[0-9]+?|([^『』]*?)』', r'\1'],
       [r'(<ref onclick="bcv\([0-9]+?,[0-9]+?,[0-9]+?\)">)＊', r'\1'],
       ['</ref｝', '</ref>'],
     ];
-    for (var i in this.searchReplace) {
-      var search = i[0];
-      var replace = i[1];
-      taggedText = replaceAllSmart(taggedText, RegExp(search, multiLine: true), replace);
-    }
+    taggedText = regex.doSearchReplace(taggedText, multiLine: true);
 
     // handling range of verses
     // e.g. John 3:16 is tagged as <ref onclick="bcv(43,3,16)">John 3:16</ref>
     // e.g. John 3:14-16 is tagged as <ref onclick="bcv(43,3,14,3,16)">John 3:14-16</ref>
     // e.g. John 3:14-4:3 is tagged as <ref onclick="bcv(43,3,14,4,3)">John 3:14-4:3</ref>
-    this.searchPattern = RegExp(r'<ref onclick="bcv\(([0-9]+?),([0-9]+?),([0-9]+?)\)">([^<>]*?)</ref>([-–])<ref onclick="bcv\(\1,([0-9]+?),([0-9]+?)\)">', multiLine: true);
-    while (this.searchPattern.hasMatch(taggedText)) {
-      taggedText = replaceAllSmart(taggedText, this.searchPattern, r'<ref onclick="bcv(\1,\2,\3,\6,\7)">\4\5');
+    regex.patternString = r'<ref onclick="bcv\(([0-9]+?),([0-9]+?),([0-9]+?)\)">([^<>]*?)</ref>([-–])<ref onclick="bcv\(\1,([0-9]+?),([0-9]+?)\)">';
+    regex.searchPattern = RegExp(regex.patternString, multiLine: true);
+    while (regex.searchPattern.hasMatch(taggedText)) {
+      regex.searchReplace = [
+        [regex.patternString, r'<ref onclick="bcv(\1,\2,\3,\6,\7)">\4\5'],
+      ];
+      taggedText = regex.doSearchReplace(taggedText, multiLine: true);
     }
 
     // remove the extra space, added at the beginning of this function
@@ -1791,8 +1785,8 @@ class BibleVerseParser {
     
     var verseReferenceList = [];
     
-    this.searchPattern = RegExp(r'bcv\(([0-9]+?,[0-9]+?,[0-9]+?[^\)\(]*?)\)');
-    for (var match in this.searchPattern.allMatches(taggedText)) {
+    var searchPattern = RegExp(r'bcv\(([0-9]+?,[0-9]+?,[0-9]+?[^\)\(]*?)\)');
+    for (var match in searchPattern.allMatches(taggedText)) {
       var stringList = match.group(1).split(",");
       var intList = [];
       for (var i in stringList) {
