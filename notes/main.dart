@@ -1,23 +1,33 @@
 import 'package:cli/cli.dart' as cli;
 import 'package:cli/BibleVerseParser.dart';
+import 'dart:io';
+import 'package:path/path.dart';
 
 main(List<String> arguments) {
   // try command "bin/main.dart testing arguments"
   print(arguments);
+  //testing();
+}
+
+testing() {
+  var file = File("lib/test.txt");
+  String filename = basename(file.path);
+  print(filename);
+}
+
+useFunctionsInLibFolderFile() {
+  print('Hello world: ${cli.calculate()}!');
 }
 
 getParser() {
   var parser = BibleVerseParser("ENG");
   //print(parser.standardAbbreviation);
-  print(parser.bcvToVerseReference(43, 3, 16));
-  print(parser.bcvToVerseReference(43, 3, 16, 3, 18));
-  print(parser.bcvToVerseReference(43, 3, 16, 4, 2));
-  print(parser.parseText('<ref onclick="bcv(1,1,1)">3 Jn. 10</ref>, 11; Rom 3:23, 24; 8:1-3'));
-  print(parser.extractAllReferences('<ref onclick="bcv(1,1,1)">3 Jn. 10</ref>, 11; Rom 3:23, 24; 8:1-3'));
-}
-
-useFunctionsInLibFolderFile() {
-  print('Hello world: ${cli.calculate()}!');
+  //print(parser.bcvToVerseReference(43, 3, 16));
+  //print(parser.bcvToVerseReference(43, 3, 16, 3, 18));
+  //print(parser.bcvToVerseReference(43, 3, 16, 4, 2));
+  //print(parser.parseText('<ref onclick="bcv(1,1,1)">3 Jn. 10</ref>, 11; Rom 3:23, 24; 8:1-3'));
+  //print(parser.extractAllReferences('<ref onclick="bcv(1,1,1)">3 Jn. 10</ref>, 11; Rom 3:23, 24; 8:1-3'));
+  parser.tagFiles(["lib/test.txt", "lib/test1.txt"]);
 }
 
 sortList() {
@@ -45,9 +55,16 @@ sortList() {
 transformAList() {
   List aStringList = <String>["a", "b", "c"];
   
-  // python3-equivalent: aStringList = [s.upper() for s in aStringList]
-  aStringList = aStringList.map((s) => s.toUpperCase()).toList();
+  // python3-equivalent: aStringList = [i.upper() for i in aStringList]
   print(aStringList);
+  aStringList = aStringList.map((i) => i.toUpperCase()).toList();
+  print(aStringList);
+  
+  // python3-equivalent: aStringList2 = [int(i) for i in aStringList2]
+  List aStringList2 = <String>["43", "3", "16"];
+  print(aStringList2);
+  aStringList2 = aStringList2.map((i) => int.parse(i)).toList();
+  print(aStringList2);
 }
 
 getSubList() {
