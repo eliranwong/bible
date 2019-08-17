@@ -1,4 +1,4 @@
-import 'RegexHelper.dart';
+import 'MyUtilities.dart';
 
 class BibleVerseParser {
 
@@ -1664,19 +1664,23 @@ class BibleVerseParser {
   }
 
   // function for converting b c v integers to verse reference string
-  bcvToVerseReference(int b, int c, int v) {
+  String bcvToVerseReference(int b, int c, int v, [int c2, int v2]) {
     var bookNo = "$b";
     if (this.standardAbbreviation.containsKey(bookNo)) {
       var abbreviation = this.standardAbbreviation[bookNo];
-      var chapter = "$c";
-      var verse = "$v";
-      return "$abbreviation $chapter:$verse";
+      if ((c2 != null) && (c2 == c) && (v2 > v)) {
+        return "$abbreviation $c:$v-$v2";
+      } else if ((c2 != null) && (c2 > c)) {
+        return "$abbreviation $c:$v-$c2:$v2";
+      } else {
+        return "$abbreviation $c:$v";
+      }
     } else {
       return "BOOK 0:0";
     }
   }
 
-  parseText(String text) {
+  String parseText(String text) {
 
     // setup regexHelper
     var regex = RegexHelper();
@@ -1775,13 +1779,10 @@ class BibleVerseParser {
     return taggedText;
   }
 
-  extractAllReferences(String text, {bool tagged = false}) {
+  List extractAllReferences(String text, {bool tagged = false}) {
     var taggedText;
-    if (!tagged) {
-        taggedText = this.parseText(text);
-    } else {
-        taggedText = text;
-    }
+
+    (!tagged) ? taggedText = this.parseText(text) : taggedText = text;
     
     var verseReferenceList = [];
     
