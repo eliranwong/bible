@@ -1,4 +1,4 @@
-import 'MyUtilities.dart';
+import 'Helpers.dart';
 
 class BibleVerseParser {
 
@@ -1783,20 +1783,25 @@ class BibleVerseParser {
     var taggedText;
 
     (!tagged) ? taggedText = this.parseText(text) : taggedText = text;
-    
+
     var verseReferenceList = [];
-    
+
     var searchPattern = RegExp(r'bcv\(([0-9]+?,[0-9]+?,[0-9]+?[^\)\(]*?)\)');
     for (var match in searchPattern.allMatches(taggedText)) {
       var stringList = match.group(1).split(",");
-      var intList = [];
-      for (var i in stringList) {
-        intList.add(int.parse(i));
-      }
-      verseReferenceList.add(intList);
+      verseReferenceList.add(stringList.map((i) => int.parse(i)).toList());
     }
-    
+
     return verseReferenceList;
+  }
+
+  void tagFiles(List filePaths) {
+    var fileIO = FileIOHelper();
+    for (var filePath in filePaths) {
+      var outputFilePath = "${filePath}_output.txt";
+      fileIO.readTextFileStreaming(filePath, this.parseText, actionFilePath: outputFilePath);
+      print("File Tagged: $outputFilePath");
+    }
   }
 
 }
