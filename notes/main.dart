@@ -1,18 +1,29 @@
+import 'dart:io'; // required by "fileOperations"
+import 'package:path/path.dart'; // required by "fileOperations"
 import 'package:cli/cli.dart' as cli;
 import 'package:cli/BibleVerseParser.dart';
-import 'dart:io';
-import 'package:path/path.dart';
 
 main(List<String> arguments) {
   // try command "bin/main.dart testing arguments"
   print(arguments);
-  //testing();
 }
 
-testing() {
+Future fileOperations () async {
+  // File: https://api.dart.dev/stable/2.4.1/dart-io/File-class.html
+  // Directory: https://api.dart.dev/stable/2.4.1/dart-io/Directory-class.html
+  
   var file = File("lib/test.txt");
+  // get file name
   String filename = basename(file.path);
   print(filename);
+  
+  // check, delete
+  var check;
+  check = await file.exists();
+  print(check);
+  if (check) file.delete();
+  check = await file.exists();
+  print(check);
 }
 
 useFunctionsInLibFolderFile() {
@@ -27,7 +38,8 @@ getParser() {
   //print(parser.bcvToVerseReference(43, 3, 16, 4, 2));
   //print(parser.parseText('<ref onclick="bcv(1,1,1)">3 Jn. 10</ref>, 11; Rom 3:23, 24; 8:1-3'));
   //print(parser.extractAllReferences('<ref onclick="bcv(1,1,1)">3 Jn. 10</ref>, 11; Rom 3:23, 24; 8:1-3'));
-  parser.tagFiles(["lib/test.txt", "lib/test1.txt"]);
+  //parser.tagFiles(["lib/test.txt", "lib/test1.txt"]);
+  parser.tagFilesInsideFolder("lib/files");
 }
 
 sortList() {
