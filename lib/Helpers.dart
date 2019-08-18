@@ -1,31 +1,5 @@
-// required by FileHelper
-import 'dart:io';
-import 'dart:convert';
-//import 'package:path/path.dart';
-
-class RegexHelper {
-
-  var searchReplace;
-
-  var searchPattern;
-  
-  var patternString;
-
-  String Function(Match) replacement(String pattern) => (Match match) => pattern.replaceAllMapped(new RegExp(r'\\(\d+)'), (m) => match[int.parse(m[1])]);
-
-  String replaceAllSmart(String source, Pattern pattern, String replacementPattern) => source.replaceAllMapped(pattern, replacement(replacementPattern));
-
-  String doSearchReplace(String text, {bool multiLine = false, bool caseSensitive = true, bool unicode = false, bool dotAll = false}) {
-    var replacedText = text;
-    for (var i in this.searchReplace) {
-      var search = i[0];
-      var replace = i[1];
-      replacedText = this.replaceAllSmart(replacedText, RegExp(search, multiLine: multiLine, caseSensitive: caseSensitive, unicode: unicode, dotAll: dotAll), replace);
-    }
-    return replacedText;
-  }
-
-}
+import 'dart:io'; // required by "FileIOHelper"
+import 'dart:convert'; // required by "FileIOHelper"
 
 class FileIOHelper {
 
@@ -82,6 +56,30 @@ class FileIOHelper {
     sink.write(content);
     await sink.flush();
     await sink.close();
+  }
+
+}
+
+class RegexHelper {
+
+  var searchReplace;
+
+  var searchPattern;
+  
+  var patternString;
+
+  String Function(Match) replacement(String pattern) => (Match match) => pattern.replaceAllMapped(new RegExp(r'\\(\d+)'), (m) => match[int.parse(m[1])]);
+
+  String replaceAllSmart(String source, Pattern pattern, String replacementPattern) => source.replaceAllMapped(pattern, replacement(replacementPattern));
+
+  String doSearchReplace(String text, {bool multiLine = false, bool caseSensitive = true, bool unicode = false, bool dotAll = false}) {
+    var replacedText = text;
+    for (var i in this.searchReplace) {
+      var search = i[0];
+      var replace = i[1];
+      replacedText = this.replaceAllSmart(replacedText, RegExp(search, multiLine: multiLine, caseSensitive: caseSensitive, unicode: unicode, dotAll: dotAll), replace);
+    }
+    return replacedText;
   }
 
 }
