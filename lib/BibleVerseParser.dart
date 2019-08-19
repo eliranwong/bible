@@ -1806,7 +1806,7 @@ class BibleVerseParser {
         var outputFile = File(outputFilePath);
         var isOutputFile = await outputFile.exists();
         if (isOutputFile) outputFile.delete();
-        fileIO.readTextFileStreaming(filePath, this.parseText, actionFilePath: outputFilePath);
+        fileIO.processTextFileStreaming(filePath, this.parseText, actionFilePath: outputFilePath);
         print("Tagged file: $outputFilePath");
       }
     }

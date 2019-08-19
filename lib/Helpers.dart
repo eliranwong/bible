@@ -3,7 +3,17 @@ import 'dart:convert'; // required by "FileIOHelper"
 
 class FileIOHelper {
 
-  Future readTextFile(String filePath, Function actionOnContent, {String actionFilePath}) async {
+  Future readTextFile(String filePath) async {
+    var textFile = File(filePath);
+    try {
+      var contents = await textFile.readAsString();
+      return contents;
+    } catch (e) {
+      return(e);
+    }
+  }
+
+  Future processTextFile(String filePath, Function actionOnContent, {String actionFilePath}) async {
     var textFile = File(filePath);
     try {
       var contents = await textFile.readAsString();
@@ -13,7 +23,7 @@ class FileIOHelper {
     }
   }
 
-  Future readTextFileStreaming(String filePath, Function actionOnLine, {String actionFilePath}) async {
+  Future processTextFileStreaming(String filePath, Function actionOnLine, {String actionFilePath}) async {
     var textFile = File(filePath);
     Stream<List<int>> inputStream = textFile.openRead();
 
