@@ -8,16 +8,27 @@ import 'package:cli/Helpers.dart';
 main(List<String> arguments) {
   // try command "bin/main.dart testing arguments"
   print(arguments);
-  testJsonBible("C:\Users\elira\OneDrive\Desktop\Dart\cli\bin\TextKJV.json");
+  //testSearchJsonBible("TextKJV.json");
+  getParser();
 }
 
-Future testJsonBible(filePath) async {
+Future testSearchJsonBible(filePath) async {
   var fileIO = FileIOHelper();
   var bibleJsonString = await fileIO.readTextFile(filePath);
-  print(bibleJsonString.runtimeType);
-  print(bibleJsonString);
-  //var verses = jsonDecode(bibleJsonString);
-  //print(verses.where((i) => (i["vText"].contains("created the") as bool)).toList());
+  //print(bibleJsonString.runtimeType);
+  //print(bibleJsonString);
+  var verses = jsonDecode(bibleJsonString);
+  var searchResults = verses.where((i) => (i["vText"].contains("created") as bool)).toList();
+  String versesFound = "";
+  for (var found in searchResults) {
+    var b = found["bNo"];
+    var c = found["cNo"];
+    var v = found["vNo"];
+    var bcvRef = BibleVerseParser("ENG").bcvToVerseReference(b, c, v);
+    var text = found["vText"];
+    versesFound += "$bcvRef $text\n\n";
+  }
+  print(versesFound);
 }
 
 Future fileOperations () async {
