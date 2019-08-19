@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'Helpers.dart';
 
 class BibleVerseParser {
@@ -1799,32 +1798,17 @@ class BibleVerseParser {
   Future tagFiles(List filePaths) async {
     var fileIO = FileIOHelper();
     for (var filePath in filePaths) {
-      var inputFile = File(filePath);
-      var isInputFile = await inputFile.exists();
-      if (isInputFile) {
+      var isInputFile = await fileIO.isFile(filePath);
+      var fileBasename = fileIO.getFilename(filePath);
+      if ((isInputFile) && (!fileBasename.startsWith("."))) {
         var outputFilePath = "${filePath}_output.txt";
-        var outputFile = File(outputFilePath);
-        var isOutputFile = await outputFile.exists();
-        if (isOutputFile) outputFile.delete();
-        fileIO.processTextFileStreaming(filePath, this.parseText, actionFilePath: outputFilePath);
-        print("Tagged file: $outputFilePath");
+        fileIO.formatTextFile(filePath, this.parseText, outputFilePath);
       }
     }
   }
 
   Future tagFilesInsideFolder(String folderPath) async {
-    var dir = Directory(folderPath);
-    var fileList = [];
-
-    try {
-      var dirList = dir.list();
-      await for (FileSystemEntity f in dirList) {
-        if (f is File) fileList.add(f.path);
-      }
-    } catch (e) {
-      print(e.toString());
-    }
-
+    var fileList = await FileIOHelper().getFileListInFolder(folderPath);
     this.tagFiles(fileList);
   }
 

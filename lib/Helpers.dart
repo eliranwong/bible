@@ -1,7 +1,39 @@
 import 'dart:io'; // required by "FileIOHelper"
 import 'dart:convert'; // required by "FileIOHelper"
+import 'package:path/path.dart'; // required by "FileIOHelper"
 
 class FileIOHelper {
+
+  // File: https://api.dart.dev/stable/2.4.1/dart-io/File-class.html
+  // Directory: https://api.dart.dev/stable/2.4.1/dart-io/Directory-class.html
+
+  String getFilename (filePath) {
+    var file = File(filePath);
+    String filename = basename(file.path);
+    return filename;
+  }
+
+  Future isFile(String filePath) async {
+    var file = File(filePath);
+    var check = await file.exists();
+    return check;
+  }
+
+  Future getFileListInFolder(String folderPath) async {
+    var dir = Directory(folderPath);
+    try {
+      var dirList = dir.list();
+      var fileList = [];
+      await for (FileSystemEntity f in dirList) {
+        if (f is File) fileList.add(f.path);
+      }
+      return fileList;
+    } catch (e) {
+      var errors = [];
+      errors.add(e.toString());
+      return errors;
+    }
+  }
 
   Future readTextFile(String filePath) async {
     var textFile = File(filePath);
@@ -13,43 +45,50 @@ class FileIOHelper {
     }
   }
 
-  Future processTextFile(String filePath, Function actionOnContent, {String actionFilePath}) async {
+  Future formatTextFile(String filePath, Function actionOnContent, [String actionFilePath]) async {
+    if (actionFilePath == null) actionFilePath = filePath;
+
     var textFile = File(filePath);
     try {
       var contents = await textFile.readAsString();
-      (actionFilePath != null) ? actionOnContent(contents, actionFilePath) : actionOnContent(contents);
+      contents = await actionOnContent(contents);
+      await writeTextFile(contents, actionFilePath);
+      print("Formatted file: $actionFilePath");
     } catch (e) {
       print(e);
     }
   }
 
-  Future processTextFileStreaming(String filePath, Function actionOnLine, {String actionFilePath}) async {
+  Future formatTextFileStreaming(String filePath, Function actionOnLine, [String actionFilePath]) async {
+    var outputFile;
+    if (actionFilePath == null) {
+      actionFilePath = filePath;
+      outputFile = File(actionFilePath);
+      this.appendTextFile("\n\n/* Formatted content */\n\n", actionFilePath);
+    } else {
+      outputFile = File(actionFilePath);
+      var existingFile = await this.isFile(actionFilePath);
+      if (existingFile) await outputFile.delete();
+    }
+    
     var textFile = File(filePath);
     Stream<List<int>> inputStream = textFile.openRead();
 
-    var outputFile;
     var sink;
-    if (actionFilePath != null) {
-      outputFile = File(actionFilePath);
-      sink = outputFile.openWrite(mode: FileMode.append);
-    }
+    sink = outputFile.openWrite(mode: FileMode.append);
 
     var lines = utf8.decoder.bind(inputStream).transform(LineSplitter());
     try {
       await for (var line in lines) {
-        if (actionFilePath != null) {
-          line = actionOnLine(line);
-          sink.write("$line\n");
-          await sink.flush();
-        } else {
-          actionOnLine(line);
-        }
+        line = await actionOnLine(line);
+        sink.write("$line\n");
+        await sink.flush();
       }
-      // print('File "$filePath" is now closed.');
+      print("Formatted file: $actionFilePath");
     } catch (e) {
       print(e);
     }
-    if (actionFilePath != null) await sink.close();
+    await sink.close();
   }
 
   Future writeTextFile(String content, String filePath) async {
