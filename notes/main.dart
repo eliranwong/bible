@@ -3,10 +3,21 @@ import 'dart:convert'; // required by "whereCollection"
 import 'package:path/path.dart'; // required by "fileOperations"
 import 'package:cli/cli.dart' as cli;
 import 'package:cli/BibleVerseParser.dart';
+import 'package:cli/Helpers.dart';
 
 main(List<String> arguments) {
   // try command "bin/main.dart testing arguments"
   print(arguments);
+  testJsonBible("C:\Users\elira\OneDrive\Desktop\Dart\cli\bin\TextKJV.json");
+}
+
+Future testJsonBible(filePath) async {
+  var fileIO = FileIOHelper();
+  var bibleJsonString = await fileIO.readTextFile(filePath);
+  print(bibleJsonString.runtimeType);
+  print(bibleJsonString);
+  //var verses = jsonDecode(bibleJsonString);
+  //print(verses.where((i) => (i["vText"].contains("created the") as bool)).toList());
 }
 
 Future fileOperations () async {
