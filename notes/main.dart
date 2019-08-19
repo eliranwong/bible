@@ -1,4 +1,5 @@
 import 'dart:io'; // required by "fileOperations"
+import 'dart:convert'; // required by "whereCollection"
 import 'package:path/path.dart'; // required by "fileOperations"
 import 'package:cli/cli.dart' as cli;
 import 'package:cli/BibleVerseParser.dart';
@@ -77,6 +78,57 @@ transformAList() {
   print(aStringList2);
   aStringList2 = aStringList2.map((i) => int.parse(i)).toList();
   print(aStringList2);
+}
+
+combineCollection() {
+  List list1 = [4, 5, 3, 1, 9, 2];
+  List list2 = [1, 2, 3, 4, 5];
+  print([...list1, ...list2]);
+  
+  Set set1 = {4, 5, 3, 1, 9, 2};
+  Set set2 = {1, 2, 3, 4, 5};
+  print({...set1, ...set2});
+  
+  Map map1 = {"test1": 1, "test2": 2};
+  Map map2 = {"test1": 11, "test3": 3};
+  print({...map1, ...map2}); // note: test1: 11 replaces test1: 1
+}
+
+whereCollection() {
+  List list1 = [4, 5, 3, 1, 9, 2];
+  print(list1.where((i) => i > 4).toList());
+
+  List list2 = ["one", "two", "three", "four", "five", "six", "seven"];
+  print(list2.where((i) => i.contains("e")).toList());
+
+  Map map1 = {"b": 1, "c": 1, "v": 1, "text": "aaaaa"};
+  Map map2 = {"b": 1, "c": 1, "v": 2, "text": "bbbbb"};
+  List list3 = [map1, map2];
+  print(list3);
+  print(list3[0].runtimeType);
+  print(list3[0]["text"].runtimeType);
+  print(list3.where((i) => i["text"].contains("b")).toList());
+  
+  String jsonString = '''
+    [
+      {
+        "bNo": 1,
+        "cNo": 1,
+        "vText": "In the beginning God created the heaven and the earth.",
+        "vNo": 1
+      },
+      {
+        "bNo": 1,
+        "cNo": 1,
+        "vText": "¶ And the earth was without form, and void; and darkness [was] upon the face of the deep. And the Spirit of God moved upon the face of the waters.",
+        "vNo": 2
+      }
+    ]
+  ''';
+  var verses = jsonDecode(jsonString);
+  print(verses[0].runtimeType);
+  print(verses[0]["vText"].runtimeType);
+  print(verses.where((i) => (i["vText"].contains("b") as bool)).toList()); // not "as bool" is required in this case to convert (dynamic) => dynamic to (dynamic) => bool
 }
 
 getSubList() {
