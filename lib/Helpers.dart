@@ -109,6 +109,17 @@ class FileIOHelper {
 
 }
 
+class jsonHelper {
+
+  Future getJsonObject(filePath) async {
+    var fileIO = FileIOHelper();
+    var jsonString = await fileIO.readTextFile(filePath);
+    var jsonObject = await jsonDecode(jsonString);
+    return jsonObject;
+  }
+
+}
+
 class RegexHelper {
 
   var searchReplace;
