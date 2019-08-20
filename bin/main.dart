@@ -11,8 +11,9 @@ main(List<String> arguments) {
   if (arguments.isNotEmpty) searchBible(1, arguments[0], arguments.sublist(1).join(" "));
 }
 
-loadBible(int bibleID, String bibleModule) {
-  //return null;
+Future loadBible(int bibleID, String bibleModule) async {
+  if (!(await Bibles().isValidBible(bibleModule))) return null;
+
   switch (bibleID) {
     case 1:
       if ((bible1 == null) || ((bible1 != null) && (bible1.module != bibleModule))) {
@@ -31,6 +32,7 @@ loadBible(int bibleID, String bibleModule) {
   }
 }
 
-searchBible(int bibleID, String bibleModule, String searchString) {
-  loadBible(bibleID, bibleModule)?.search(searchString);
+Future searchBible(int bibleID, String bibleModule, String searchString) async {
+  var bible = await loadBible(bibleID, bibleModule);
+  if (bible != null) bible.search(searchString);
 }
