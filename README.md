@@ -11,4 +11,5 @@ To develop a cross-platform mobile app
 For offline desktop version, we have:
 UniqueBible.app at <a href="https://github.com/eliranwong/UniqueBible">https://github.com/eliranwong/UniqueBible</a>.
 
+For online versions, iOS app, ...
 Visit <a href="https://BibleTools.app">https://BibleTools.app</a> for more apps / information.
