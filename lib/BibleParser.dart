@@ -1799,7 +1799,7 @@ class BibleParser {
     var fileIO = FileIOHelper();
     for (var filePath in filePaths) {
       var isInputFile = await fileIO.isFile(filePath);
-      var fileBasename = fileIO.getFilename(filePath);
+      var fileBasename = fileIO.getBasename(filePath);
       if ((isInputFile) && (!fileBasename.startsWith("."))) {
         var outputFilePath = "${filePath}_output.txt";
         fileIO.formatTextFile(filePath, this.parseText, outputFilePath);

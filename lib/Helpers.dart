@@ -7,12 +7,16 @@ class FileIOHelper {
   // File: https://api.dart.dev/stable/2.4.1/dart-io/File-class.html
   // Directory: https://api.dart.dev/stable/2.4.1/dart-io/Directory-class.html
 
-  String getDataPath(String dataType, String module) {
+  String getDataPath(String dataType, [String module]) {
     var resourceFolder = "data";
-    return p.join(resourceFolder, dataType, "$module.json");
+    if (module == null) {
+	  return p.join(resourceFolder, dataType);
+	} else {
+	  return p.join(resourceFolder, dataType, "$module.json");
+	}
   }
 
-  String getFilename (filePath) {
+  String getBasename(String filePath) {
     var file = File(filePath);
     String filename = p.basename(file.path);
     return filename;
@@ -119,7 +123,7 @@ class JsonHelper {
   Future getJsonObject(filePath) async {
     var fileIO = FileIOHelper();
     var jsonString = await fileIO.readTextFile(filePath);
-    var jsonObject = await jsonDecode(jsonString);
+    var jsonObject = jsonDecode(jsonString);
     return jsonObject;
   }
 

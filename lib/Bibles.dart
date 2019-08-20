@@ -1,6 +1,24 @@
 import 'Helpers.dart';
 import 'package:cli/BibleParser.dart';
 
+class Bibles {
+
+  Future getBibleList() async {
+    var fileIO = FileIOHelper();
+	var bibleFolder = fileIO.getDataPath("bible");
+	var bibleList = await fileIO.getFileListInFolder(bibleFolder);
+	bibleList = bibleList.where((i) => (i.endsWith(".json") as bool)).toList();
+	bibleList = bibleList.map((i) => fileIO.getBasename(i.substring(0, (i.length - 5)))).toList();
+	return bibleList;
+  }
+
+  Future isValidBible(String bible) async {
+    var bibleList = await this.getBibleList();
+	return (bibleList.contains(bible));
+  }
+
+}
+
 class Bible {
 
   var biblePath;
