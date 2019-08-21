@@ -5,12 +5,13 @@ var bible1, bible2;
 
 // try commands like:
 // "bin/main.dart open John 3:16"
-// "bin/main.dart open John 3:16-18; Rom 5:8; 3:23, 25"
+// "bin/main.dart open John 3:16-18; Rom 5:8, 3:23, 25"
 // "bin/main.dart search Christ Jesus" to search for verses containing "Christ Jesus"
 // "bin/main.dart search Christ.*?Jesus" to search for verses containing "Christ", followed by "Jesus" anywhere in the same verse.
 
 main(List<String> arguments) {
   if (arguments.isNotEmpty) {
+    print(arguments);
     var features = {
       "open": openBible,
       "search": searchBible,
