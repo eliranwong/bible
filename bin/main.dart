@@ -11,7 +11,7 @@ var bible1, bible2;
 
 main(List<String> arguments) {
   if (arguments.isNotEmpty) {
-    print(arguments);
+    //print(arguments);
     var features = {
       "open": openBible,
       "search": searchBible,
