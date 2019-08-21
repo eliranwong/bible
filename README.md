@@ -25,7 +25,7 @@ To open multiple verses (e.g. John 3:16-18, Rom 5:8, 3:23, 2Ti 3:14-16, Ge 1:5, 
 To search for verses containing "Christ Jesus":
 * dart bin/main.dart search KJV Christ Jesus
 
-To search for verses containing "Christ", followed by "Jesus" anywhere in the same verse:
+To search for verses containing "Christ", followed by "Jesus" anywhere in the rest of the same verse:
 * dart bin/main.dart search KJV Christ.*?Jesus
 
 To compare John 3:16 in all installed bibles:
