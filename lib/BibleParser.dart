@@ -1240,6 +1240,7 @@ class BibleParser {
     "启示录": "66",
     "啟": "66",
     "啟示錄": "66",
+/*
     "1 ин": "62", // Russian book names & abbreviations
     "1 Ин": "62",
     "1 иоанна": "62",
@@ -1650,6 +1651,7 @@ class BibleParser {
     "Чис": "4",
     "числа": "4",
     "Числа": "4",
+*/
   };
 
   // constructor
@@ -1664,7 +1666,16 @@ class BibleParser {
   }
 
   // function for converting b c v integers to verse reference string
-  String bcvToVerseReference(int b, int c, int v, [int c2, int v2]) {
+  String bcvToVerseReference(List bcvList) {
+    var b = bcvList[0];
+    var c = bcvList[1];
+    var v = bcvList[2];
+    var c2, v2;
+    if (bcvList.length == 5) {
+      c2 = bcvList[3];
+      v2 = bcvList[4];
+    }
+
     var bookNo = "$b";
     if (this.standardAbbreviation.containsKey(bookNo)) {
       var abbreviation = this.standardAbbreviation[bookNo];
