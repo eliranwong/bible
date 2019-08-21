@@ -3,8 +3,12 @@ Bible Tools written in <a href="dart.dev">Dart programming language</a>.
 
 Developed from version 2.4.0
 
-# goal
+# aim
+To develop a set of cross-platform codes on bible tools
+
+# objectives
 To develop a command line version of bible app
+
 To develop a cross-platform mobile app
 
 # progress
