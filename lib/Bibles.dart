@@ -40,10 +40,42 @@ class Bible {
     ((referenceList.length == 1) && (referenceList[0].length == 3)) ? this.openSingleChapter(referenceList[0]) : this.openMultipleVerses(referenceList);
   }
 
+  Future getBookList() async {
+    if (this.data == null) await this.loadData();
+
+    Set books = {};
+	for (var i in this.data) {
+	  books.add(i["bNo"]);
+	}
+	return books.toList();
+  }
+
+  Future getChapterList(int b) async {
+    if (this.data == null) await this.loadData();
+
+    Set chapters = {};
+	var searchResults = this.data.where((i) => (i["bNo"] == b)).toList();
+	for (var i in searchResults) {
+	  chapters.add(i["cNo"]);
+	}
+	return chapters.toList();
+  }
+
+  Future getVerseList(int b, int c) async {
+    if (this.data == null) await this.loadData();
+
+    Set verses = {};
+	var searchResults = this.data.where((i) => ((i["bNo"] == b) && (i["cNo"] == c))).toList();
+	for (var i in searchResults) {
+	  verses.add(i["vNo"]);
+	}
+	return verses.toList();
+  }
+
   Future openSingleVerse(List bcvList) async {
     if (this.data == null) await this.loadData();
 
-    String versesFound = "[${BibleParser("ENG").bcvToVerseReference(bcvList)}] ";
+    String versesFound = "";
 
     var b = bcvList[0];
     var c = bcvList[1];
@@ -61,7 +93,7 @@ class Bible {
   Future openSingleVerseRange(List bcvList) async {
     if (this.data == null) await this.loadData();
 
-    String versesFound = "[${BibleParser("ENG").bcvToVerseReference(bcvList)}] ";
+    String versesFound = "";
 
     var b = bcvList[0];
     var c = bcvList[1];
@@ -76,7 +108,7 @@ class Bible {
       while (check <= v2) {
         searchResults = this.data.where((i) => ((i["bNo"] == b) && (i["cNo"] == c) && (i["vNo"] == check))).toList();
         for (var found in searchResults) {
-          var verseText = found["vText"].trim();
+          var verseText = "[${found["vNo"]}] ${found["vText"].trim()}";
           versesFound += "$verseText ";
         }
         check += 1;
@@ -108,15 +140,14 @@ class Bible {
   Future openSingleChapter(List bcvList) async {
     if (this.data == null) await this.loadData();
 
-    String versesFound = "";
+    String versesFound = "[${BibleParser("ENG").bcvToChapterReference(bcvList)}]\n";
     var searchResults = this.data.where((i) => ((i["bNo"] == bcvList[0]) && (i["cNo"] == bcvList[1]))).toList();
     for (var found in searchResults) {
       var b = found["bNo"];
       var c = found["cNo"];
       var v = found["vNo"];
-      var bcvRef = BibleParser("ENG").bcvToVerseReference([b, c, v]);
       var verseText = found["vText"].trim();
-      (v == bcvList[2]) ? versesFound += "**********\n[$bcvRef] $verseText\n**********\n" : versesFound += "[$bcvRef] $verseText\n";
+      (v == bcvList[2]) ? versesFound += "**********\n[$v] $verseText\n**********\n" : versesFound += "[$v] $verseText\n";
     }
     print(versesFound);
   }
@@ -126,7 +157,8 @@ class Bible {
 
     String versesFound = "";
     for (var bcvList in listOfBcvList) {
-      if (bcvList.length == 5) {
+      versesFound += "[${BibleParser("ENG").bcvToVerseReference(bcvList)}] ";
+	  if (bcvList.length == 5) {
         var verse = await openSingleVerseRange(bcvList);
         versesFound += "$verse\n\n";
       } else {
