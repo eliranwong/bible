@@ -1,49 +1,53 @@
-/*
-The command line version is taking shape ...
-
-At the moment , you may try commands like:
-
-To open John 3:16 in KJV bible:
-* dart bin/main.dart open KJV John 3:16
-
-To open multiple verses (e.g. John 3:16-18, Rom 5:8, 3:23, 2Ti 3:14-16, Ge 1:5, 8, 13) in KJV bible:
-* dart bin/main.dart open KJV John 3:16-18, Rom 5:8, 3:23, 2Ti 3:14-1, Ge 1:5, 8, 13
-
-To search for verses containing "Christ Jesus":
-* dart bin/main.dart search KJV Christ Jesus
-
-To search for verses containing "Christ", followed by "Jesus" anywhere in the same verse:
-* dart bin/main.dart search KJV Christ.*?Jesus
-
-To compare John 3:16 in all installed bibles:
-* dart bin/main.dart compare ALL John 3:16
-
-To compare John 3:16 only in CUV and KJV:
-* dart bin/main.dart compare CUV_KJV John 3:16
-
-<i><b>Remarks:</b></i>
-* Please use "," instead of ";" to separate verses in command lines.
-* Common abbreviations are supported.
-*/
-
+/// The command line version is taking shape ...
+/// 
+/// At the moment , you may try commands like:
+/// 
+/// To open John 3:16 in KJV bible:
+/// * dart bin/main.dart open KJV John 3:16
+/// 
+/// To open multiple verses (e.g. John 3:16-18, Rom 5:8, 3:23, 2Ti 3:14-16, Ge 1:5, 8, 13) in KJV bible:
+/// * dart bin/main.dart open KJV John 3:16-18, Rom 5:8, 3:23, 2Ti 3:14-1, Ge 1:5, 8, 13
+/// 
+/// To search for verses containing "Christ Jesus":
+/// * dart bin/main.dart search KJV Christ Jesus
+/// 
+/// To search for verses containing "Christ", followed by "Jesus" anywhere in the rest of the same verse:
+/// * dart bin/main.dart search KJV Christ.*?Jesus
+/// 
+/// To compare John 3:16 in all installed bibles:
+/// * dart bin/main.dart compare ALL John 3:16
+/// 
+/// To compare John 3:16 only in CUV and KJV:
+/// * dart bin/main.dart compare CUV_KJV John 3:16
+/// 
+/// <i><b>Remarks:</b></i>
+/// * Please use "," instead of ";" to separate verses in command lines.
+/// * Common abbreviations are supported.
+/// * Regular expression is turned on by default for searching bibles.  Use \ to escape characters like ()[].*? .
 
 import 'package:cli/BibleParser.dart';
 import 'package:cli/Bibles.dart';
+import 'package:cli/config.dart' as config;
 
 var bible1, bible2;
 
 main(List<String> arguments) {
-  if ((arguments.isNotEmpty) && (arguments.length > 3)) {
-    //print(arguments);
+  if ((arguments.isNotEmpty) && (arguments.length >= 3)) {
     var features = {
       "open": openBible,
       "search": searchBible,
       "compare": compareBibles,
     };
-    var feature = features[arguments[0]];
-    var module = arguments[1];
-    var entry = arguments.sublist(2).join(" ");
-    feature(1, module, entry);
+    if (features.keys.contains(arguments[0])) {
+      var feature = features[arguments[0]];
+      var module = arguments[1];
+      var entry = arguments.sublist(2).join(" ");
+      feature(1, module, entry);
+    } else {
+      openBible(1, config.bible1, arguments.join(" "));
+    }
+  } else {
+    openBible(1, config.bible1, arguments.join(" "));
   }
 }
 
