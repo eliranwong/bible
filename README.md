@@ -14,7 +14,7 @@ To develop a cross-platform mobile app
 # progress
 The command line version is taking shape ...
 
-At the moment , you may try commands like:
+At the moment, you may try commands like:
 
 To open John 3:16 in KJV bible:
 * dart bin/main.dart open KJV John 3:16
