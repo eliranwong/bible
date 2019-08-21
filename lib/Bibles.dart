@@ -9,6 +9,7 @@ class Bibles {
 	var bibleList = await fileIO.getFileListInFolder(bibleFolder);
 	bibleList = bibleList.where((i) => (i.endsWith(".json") as bool)).toList();
 	bibleList = bibleList.map((i) => fileIO.getBasename(i.substring(0, (i.length - 5)))).toList();
+	bibleList.sort();
 	return bibleList;
   }
 
@@ -18,6 +19,7 @@ class Bibles {
     for (var bible in bibleList) {
       if (allBibleList.contains(bible)) validBibleList.add(bible);
     }
+    validBibleList.sort();
     return validBibleList;
   }
 
@@ -77,7 +79,9 @@ class Bible {
 	for (var i in this.data) {
 	  books.add(i["bNo"]);
 	}
-	return books.toList();
+	var bookList = books.toList();
+	bookList.sort();
+	return bookList;
   }
 
   Future getChapterList(int b) async {
@@ -88,7 +92,9 @@ class Bible {
 	for (var i in searchResults) {
 	  chapters.add(i["cNo"]);
 	}
-	return chapters.toList();
+	var chapterList = chapters.toList();
+	chapterList.sort();
+	return chapterList;
   }
 
   Future getVerseList(int b, int c) async {
@@ -100,6 +106,9 @@ class Bible {
 	  verses.add(i["vNo"]);
 	}
 	return verses.toList();
+	var verseList = verses.toList();
+	verseList.sort();
+	return verseList;
   }
 
   Future openSingleVerse(List bcvList) async {
@@ -213,7 +222,7 @@ class Bible {
       versesFound += "[$bcvRef] $verseText\n\n";
     }
     print(versesFound);
-    print("$searchString is found in ${searchResults.length} verse(s).");
+    print("$searchString is found in ${searchResults.length} verse(s).\n");
   }
 
 }
