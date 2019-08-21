@@ -10,10 +10,10 @@ class FileIOHelper {
   String getDataPath(String dataType, [String module]) {
     var resourceFolder = "data";
     if (module == null) {
-	  return p.join(resourceFolder, dataType);
-	} else {
-	  return p.join(resourceFolder, dataType, "$module.json");
-	}
+      return p.join(resourceFolder, dataType);
+    } else {
+      return p.join(resourceFolder, dataType, "$module.json");
+    }
   }
 
   String getBasename(String filePath) {

@@ -1694,12 +1694,12 @@ class BibleParser {
 
   String bcvToChapterReference(List bcvList) {
     var bcvRef;
-	if (bcvList.length >= 3) {
-	  bcvRef = this.bcvToVerseReference(bcvList);
-	} else if (bcvList.length == 2) {
-	  bcvRef = this.bcvToVerseReference([...bcvList, 1]);
-	}
-	return bcvRef.replaceAll(RegExp(r":.*?$"), "");
+    if (bcvList.length >= 3) {
+      bcvRef = this.bcvToVerseReference(bcvList);
+    } else if (bcvList.length == 2) {
+      bcvRef = this.bcvToVerseReference([...bcvList, 1]);
+    }
+    return bcvRef.replaceAll(RegExp(r":.*?$"), "");
   }
 
   String parseText(String text) {
