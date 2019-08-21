@@ -14,29 +14,39 @@ To develop a cross-platform mobile app
 # progress
 The command line version is taking shape ...
 
-At the moment, you may try commands like:
+At the moment , you may try commands like:
 
-To open John 3:16 in KJV bible:
+To "open" John 3:16 in KJV bible:
 * dart bin/main.dart open KJV John 3:16
 
-To open multiple verses (e.g. John 3:16-18, Rom 5:8, 3:23, 2Ti 3:14-16, Ge 1:5, 8, 13) in KJV bible:
+To "open" multiple verses (e.g. John 3:16-18, Rom 5:8, 3:23, 2Ti 3:14-16, Ge 1:5, 8, 13) in KJV bible:
 * dart bin/main.dart open KJV John 3:16-18, Rom 5:8, 3:23, 2Ti 3:14-1, Ge 1:5, 8, 13
 
-To search for verses containing "Christ Jesus":
+To "search" for verses containing "Christ Jesus":
 * dart bin/main.dart search KJV Christ Jesus
 
-To search for verses containing "Christ", followed by "Jesus" anywhere in the rest of the same verse:
+To "search" with standard regular expressions, e.g.:
 * dart bin/main.dart search KJV Christ.*?Jesus
 
-To compare John 3:16 in all installed bibles:
+To "compare" John 3:16 in all installed bibles:
 * dart bin/main.dart compare ALL John 3:16
 
-To compare John 3:16 only in CUV and KJV:
-* dart bin/main.dart compare CUV_KJV John 3:16
+To "compare" John 3:16 only in NET and KJV:
+* dart bin/main.dart compare NET_KJV John 3:16
+
+To "compare" multiple entries, e.g.:
+* dart bin/main.dart compare ALL John 3:16, Rom 5:8
+* dart bin/main.dart compare NET_KJV John 3:16, Rom 5:8
+
+To display chapter John 3 in "parallel" modes, with verse 16 highlighted (e.g. NET & KJV):
+* dart bin/main.dart parallel NET_KJV John 3:16
 
 <i><b>Remarks:</b></i>
 * Please use "," instead of ";" to separate verses in command lines.
 * Common abbreviations are supported.
+* Please note the difference between "compare" and "parallel".
+* "compare" accepts multiple entries of verse references whereas "parallel" ignores.
+* "parallel" displays a full chapter with a particular verse highlighted whereas "compare" shows particular verse(s) only.
 * Regular expression is turned on by default for searching bibles.  Use \ to escape characters like ()[].*? .
 
 # siblings
