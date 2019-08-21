@@ -21,22 +21,22 @@ At the moment , you may try commands like:
 * Common abbreviations are supported.
 
 To open John 3:16 in KJV bible:
-"dart bin/main.dart open KJV John 3:16"
+* dart bin/main.dart open KJV John 3:16
 
 To open multiple verses (e.g. John 3:16-18, Rom 5:8, 3:23, 2Ti 3:14-16, Ge 1:5, 8, 13) in KJV bible:
-"dart bin/main.dart open KJV John 3:16-18, Rom 5:8, 3:23, 2Ti 3:14-1, Ge 1:5, 8, 13"
+* dart bin/main.dart open KJV John 3:16-18, Rom 5:8, 3:23, 2Ti 3:14-1, Ge 1:5, 8, 13
 
 To search for verses containing "Christ Jesus":
-"dart bin/main.dart search KJV Christ Jesus"
+* dart bin/main.dart search KJV Christ Jesus
 
 To search for verses containing "Christ", followed by "Jesus" anywhere in the same verse:
-"dart bin/main.dart search KJV Christ.*?Jesus"
+* dart bin/main.dart search KJV Christ.*?Jesus
 
 To compare John 3:16 in all installed bibles:
-"dart bin/main.dart compare ALL John 3:16"
+* dart bin/main.dart compare ALL John 3:16
 
 To compare John 3:16 only in CUV and KJV:
-"dart bin/main.dart compare CUV_KJV John 3:16"
+* dart bin/main.dart compare CUV_KJV John 3:16
 
 # siblings
 For offline desktop version, we have:
