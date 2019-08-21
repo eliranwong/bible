@@ -36,7 +36,7 @@ To "compare" John 3:16 only in NET and KJV:
 
 To "compare" multiple entries, e.g.:
 * dart bin/main.dart compare ALL John 3:16, Rom 5:8
-* dart bin/main.dart compare NET_KJV John 3:16, Rom 5:8
+* dart bin/main.dart compare NET_KJV_WEB John 3:16, Rom 5:8
 
 To display chapter John 3 in "parallel" modes, with verse 16 highlighted (e.g. NET & KJV):
 * dart bin/main.dart parallel NET_KJV John 3:16
