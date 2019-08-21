@@ -4,21 +4,22 @@ import 'package:cli/Bibles.dart';
 var bible1, bible2;
 
 // try commands like:
-// "bin/main.dart open John 3:16"
-// "bin/main.dart open John 3:16-18; Rom 5:8, 3:23, 25"
-// "bin/main.dart search Christ Jesus" to search for verses containing "Christ Jesus"
-// "bin/main.dart search Christ.*?Jesus" to search for verses containing "Christ", followed by "Jesus" anywhere in the same verse.
+// "bin/main.dart open KJV John 3:16"
+// "bin/main.dart open KJV John 3:16-18; Rom 5:8, 3:23, 25"
+// "bin/main.dart search KJV Christ Jesus" to search for verses containing "Christ Jesus"
+// "bin/main.dart search KJV Christ.*?Jesus" to search for verses containing "Christ", followed by "Jesus" anywhere in the same verse.
 
 main(List<String> arguments) {
-  if (arguments.isNotEmpty) {
+  if ((arguments.isNotEmpty) && (arguments.length > 3)) {
     //print(arguments);
     var features = {
       "open": openBible,
       "search": searchBible,
     };
     var feature = features[arguments[0]];
-    var entry = arguments.sublist(1).join(" ");
-    feature(1, "KJV", entry);
+    var module = arguments[1];
+    var entry = arguments.sublist(2).join(" ");
+    feature(1, module, entry);
   }
 }
 
