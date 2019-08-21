@@ -47,6 +47,7 @@ To display chapter John 3 in "parallel" modes, with verse 16 highlighted (e.g. N
 * Please note the difference between "compare" and "parallel".
 * "compare" accepts multiple entries of verse references whereas "parallel" ignores.
 * "parallel" displays a full chapter with a particular verse highlighted whereas "compare" shows particular verse(s) only.
+* "parallel" can use no more than 2 versions [at the moment] whereas "compare" can use as many as installed versions.
 * Regular expression is turned on by default for searching bibles.  Use \ to escape characters like ()[].*? .
 
 # siblings
