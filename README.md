@@ -16,10 +16,6 @@ The command line version is taking shape ...
 
 At the moment , you may try commands like:
 
-<i><b>Remarks:</b></i>
-* Please use "," instead of ";" to separate verses in command lines.
-* Common abbreviations are supported.
-
 To open John 3:16 in KJV bible:
 * dart bin/main.dart open KJV John 3:16
 
@@ -37,6 +33,10 @@ To compare John 3:16 in all installed bibles:
 
 To compare John 3:16 only in CUV and KJV:
 * dart bin/main.dart compare CUV_KJV John 3:16
+
+<i><b>Remarks:</b></i>
+* Please use "," instead of ";" to separate verses in command lines.
+* Common abbreviations are supported.
 
 # siblings
 For offline desktop version, we have:
