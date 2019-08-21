@@ -37,8 +37,9 @@ main(List<String> arguments) {
       "open": openBible,
       "search": searchBible,
       "compare": compareBibles,
+	  "parallel": parallelBibles,
     };
-    if (features.keys.contains(arguments[0])) {
+    if (features.keys.contains(arguments[0].toLowerCase())) {
       var feature = features[arguments[0]];
       var module = arguments[1];
       var entry = arguments.sublist(2).join(" ");
@@ -97,4 +98,50 @@ Future compareBibles(int bibleID, String bibleString, String referenceString) as
     var referenceList = BibleParser().extractAllReferences(referenceString);
     if (referenceList.isNotEmpty) bibles.compareVerses(referenceList, bibleList);  
   }
+}
+
+Future parallelBibles(int bibleID, String bibleString, String referenceString) async {
+  String versesFound = "";
+  
+  var bibles = Bibles();
+  var bibleList = await bibles.getValidBibleList(bibleString.split("_"));
+  if (bibleList.length >= 2) {
+    await loadBible(1, bibleList[0]);
+	await loadBible(2, bibleList[1]);
+
+	var referenceList = BibleParser().extractAllReferences(referenceString);
+	if (referenceList.length >= 1) {
+	  var bcvList = referenceList[0];
+	  versesFound += "[${BibleParser().bcvToChapterReference(bcvList)}]\n";
+	  
+	  var b = bcvList[0];
+	  var c = bcvList[1];
+	  var v = bcvList[2];
+
+	  var bible1VerseList = await bible1.getVerseList(b, c);
+	  var vs1 = bible1VerseList[0];
+	  var ve1 = bible1VerseList[(bible1VerseList.length - 1)];
+	  
+	  var bible2VerseList = await bible2.getVerseList(b, c);
+	  var vs2 = bible2VerseList[0];
+	  var ve2 = bible2VerseList[(bible2VerseList.length - 1)];
+	  
+	  var vs, ve;
+	  (vs1 <= vs2) ? vs = vs1 : vs = vs2;
+	  (ve1 >= ve2) ? ve = ve1 : ve = ve2;
+	  
+	  for (var i = vs; i <= ve; i++) {
+        var verseText1 = await bible1.openSingleVerse([b, c, i]);
+		var verseText2 = await bible2.openSingleVerse([b, c, i]);
+		if (i == v) {
+		  versesFound += "**********\n[$i] [${bible1.module}] $verseText1\n";
+		  versesFound += "[$i] [${bible2.module}] $verseText2\n**********\n";		
+		} else {
+		  versesFound += "\n[$i] [${bible1.module}] $verseText1\n";
+		  versesFound += "[$i] [${bible2.module}] $verseText2\n\n";
+		}
+	  }
+	}
+  }
+  print(versesFound);
 }
