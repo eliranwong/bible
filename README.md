@@ -16,13 +16,13 @@ at the moment, the command line version is taking shape.
 
 you may try commands like:
 
-"bin/main.dart open John 3:16"
+"bin/main.dart open KJV John 3:16"
 
-"bin/main.dart open John 3:16-18, Rom 5:8, 3:23, 25"
+"bin/main.dart open KJV John 3:16-18, Rom 5:8, 3:23, 25"
 
-"bin/main.dart search Christ Jesus" to search for verses containing "Christ Jesus"
+"bin/main.dart search KJV Christ Jesus" to search for verses containing "Christ Jesus"
 
-"bin/main.dart search Christ.*?Jesus" to search for verses containing "Christ", followed by "Jesus" anywhere in the same verse.
+"bin/main.dart search KJV Christ.*?Jesus" to search for verses containing "Christ", followed by "Jesus" anywhere in the same verse.
 
 # siblings
 For offline desktop version, we have:
