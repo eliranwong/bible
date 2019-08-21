@@ -12,17 +12,31 @@ To develop a command line version of bible app
 To develop a cross-platform mobile app
 
 # progress
-at the moment, the command line version is taking shape.
+The command line version is taking shape ...
 
-you may try commands like:
+At the moment , you may try commands like:
 
-"bin/main.dart open KJV John 3:16"
+<i><b>Remarks:</b></i>
+* Please use "," instead of ";" to separate verses in command lines.
+* Common abbreviations are supported.
 
-"bin/main.dart open KJV John 3:16-18, Rom 5:8, 3:23, 25"
+To open John 3:16 in KJV bible:
+"dart bin/main.dart open KJV John 3:16"
 
-"bin/main.dart search KJV Christ Jesus" to search for verses containing "Christ Jesus"
+To open multiple verses (e.g. John 3:16-18, Rom 5:8, 3:23, 2Ti 3:14-16, Ge 1:5, 8, 13) in KJV bible:
+"dart bin/main.dart open KJV John 3:16-18, Rom 5:8, 3:23, 2Ti 3:14-1, Ge 1:5, 8, 13"
 
-"bin/main.dart search KJV Christ.*?Jesus" to search for verses containing "Christ", followed by "Jesus" anywhere in the same verse.
+To search for verses containing "Christ Jesus":
+"dart bin/main.dart search KJV Christ Jesus"
+
+To search for verses containing "Christ", followed by "Jesus" anywhere in the same verse:
+"dart bin/main.dart search KJV Christ.*?Jesus"
+
+To compare John 3:16 in all installed bibles:
+"dart bin/main.dart compare ALL John 3:16"
+
+To compare John 3:16 only in CUV and KJV:
+"dart bin/main.dart compare CUV_KJV John 3:16"
 
 # siblings
 For offline desktop version, we have:
