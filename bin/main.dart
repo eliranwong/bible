@@ -4,7 +4,7 @@
 /// 
 /// To "open" John 3:16 in KJV bible:
 /// * dart bin/main.dart open KJV John 3:16
-///
+/// 
 /// To "open" multiple verses (e.g. John 3:16-18, Rom 5:8, 3:23, 2Ti 3:14-16, Ge 1:5, 8, 13) in KJV bible:
 /// * dart bin/main.dart open KJV John 3:16-18, Rom 5:8, 3:23, 2Ti 3:14-1, Ge 1:5, 8, 13
 /// 
@@ -19,10 +19,10 @@
 /// 
 /// To "compare" John 3:16 only in NET and KJV:
 /// * dart bin/main.dart compare NET_KJV John 3:16
-///
+/// 
 /// To "compare" multiple entries, e.g.:
 /// * dart bin/main.dart compare ALL John 3:16, Rom 5:8
-/// * dart bin/main.dart compare NET_KJV John 3:16, Rom 5:8
+/// * dart bin/main.dart compare NET_KJV_WEB John 3:16, Rom 5:8
 /// 
 /// To display chapter John 3 in "parallel" modes, with verse 16 highlighted (e.g. NET & KJV):
 /// * dart bin/main.dart parallel NET_KJV John 3:16
@@ -33,6 +33,7 @@
 /// * Please note the difference between "compare" and "parallel".
 /// * "compare" accepts multiple entries of verse references whereas "parallel" ignores.
 /// * "parallel" displays a full chapter with a particular verse highlighted whereas "compare" shows particular verse(s) only.
+/// * "parallel" can use no more than 2 versions [at the moment] whereas "compare" can use as many as installed versions.
 /// * Regular expression is turned on by default for searching bibles.  Use \ to escape characters like ()[].*? .
 
 import 'package:cli/Bibles.dart';
