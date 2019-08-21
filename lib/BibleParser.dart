@@ -1,3 +1,4 @@
+import 'config.dart' as config;
 import 'Helpers.dart';
 
 class BibleParser {
@@ -1655,14 +1656,14 @@ class BibleParser {
   };
 
   // constructor
-  BibleParser(String standardAbbreviation) {
+  BibleParser() {
     // set standard abbreviation
     var standardAbbreviations = {
       "ENG": this.standardAbbreviationENG,
       "TC": this.standardAbbreviationTC,
       "SC": this.standardAbbreviationSC,
     };
-    this.standardAbbreviation = standardAbbreviations[standardAbbreviation];
+    this.standardAbbreviation = standardAbbreviations[config.abbreviations];
   }
 
   // function for converting b c v integers to verse reference string

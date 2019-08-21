@@ -3,7 +3,7 @@ import 'package:cli/BibleParser.dart';
 
 class Bibles {
 
-  Future getBibleList() async {
+  Future getALLBibleList() async {
     var fileIO = FileIOHelper();
 	var bibleFolder = fileIO.getDataPath("bible");
 	var bibleList = await fileIO.getFileListInFolder(bibleFolder);
@@ -12,9 +12,39 @@ class Bibles {
 	return bibleList;
   }
 
+  Future getValidBibleList(List bibleList) async {
+    var validBibleList = [];
+    var allBibleList = await this.getALLBibleList();
+    for (var bible in bibleList) {
+      if (allBibleList.contains(bible)) validBibleList.add(bible);
+    }
+    return validBibleList;
+  }
+
   Future isValidBible(String bible) async {
-    var bibleList = await this.getBibleList();
+    var bibleList = await this.getALLBibleList();
 	return (bibleList.contains(bible));
+  }
+
+  Future compareVerses(List listOfBcvList, List bibleList) async {
+    String versesFound = "";
+
+    for (var bcvList in listOfBcvList) {
+      versesFound += "[Compare ${BibleParser().bcvToVerseReference(bcvList)}]\n";
+      for (var bible in bibleList) {
+        var verseText = await Bible(bible).openSingleVerse(bcvList);
+        versesFound += "[$bible] $verseText\n";
+      }
+    }
+    print("$versesFound\n");
+  }
+
+  Future parallelVerses(List bcvList) async {
+    print("pending");
+  }
+
+  Future parallelChapters(List bcvList) async {
+    print("pending");
   }
 
 }
@@ -140,7 +170,7 @@ class Bible {
   Future openSingleChapter(List bcvList) async {
     if (this.data == null) await this.loadData();
 
-    String versesFound = "[${BibleParser("ENG").bcvToChapterReference(bcvList)}]\n";
+    String versesFound = "[${BibleParser().bcvToChapterReference(bcvList)}]\n";
     var searchResults = this.data.where((i) => ((i["bNo"] == bcvList[0]) && (i["cNo"] == bcvList[1]))).toList();
     for (var found in searchResults) {
       var b = found["bNo"];
@@ -157,7 +187,7 @@ class Bible {
 
     String versesFound = "";
     for (var bcvList in listOfBcvList) {
-      versesFound += "[${BibleParser("ENG").bcvToVerseReference(bcvList)}] ";
+      versesFound += "[${BibleParser().bcvToVerseReference(bcvList)}] ";
 	  if (bcvList.length == 5) {
         var verse = await openSingleVerseRange(bcvList);
         versesFound += "$verse\n\n";
@@ -178,7 +208,7 @@ class Bible {
       var b = found["bNo"];
       var c = found["cNo"];
       var v = found["vNo"];
-      var bcvRef = BibleParser("ENG").bcvToVerseReference([b, c, v]);
+      var bcvRef = BibleParser().bcvToVerseReference([b, c, v]);
       var verseText = found["vText"];
       versesFound += "[$bcvRef] $verseText\n\n";
     }
