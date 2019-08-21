@@ -37,6 +37,7 @@ To compare John 3:16 only in CUV and KJV:
 <i><b>Remarks:</b></i>
 * Please use "," instead of ";" to separate verses in command lines.
 * Common abbreviations are supported.
+* Regular expression is turned on by default for searching bibles.  Use \ to escape characters like ()[].*? .
 
 # siblings
 For offline desktop version, we have:
