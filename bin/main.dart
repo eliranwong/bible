@@ -1,14 +1,24 @@
+import 'package:cli/BibleParser.dart';
 import 'package:cli/Bibles.dart';
 
 var bible1, bible2;
 
-main(List<String> arguments) {
-  print(arguments);
+// try commands like:
+// "bin/main.dart open John 3:16"
+// "bin/main.dart open John 3:16-18; Rom 5:8; 3:23, 25"
+// "bin/main.dart search Christ Jesus" to search for verses containing "Christ Jesus"
+// "bin/main.dart search Christ.*?Jesus" to search for verses containing "Christ", followed by "Jesus" anywhere in the same verse.
 
-  // testing: search bible
-  // try command "bin/main.dart KJV Christ Jesus" to search for verses containing "Christ Jesus"
-  // try command "bin/main.dart KJV Christ.*?Jesus" to search for verses containing "Christ", followed by "Jesus" anywhere in the same verse.  
-  if (arguments.isNotEmpty) searchBible(1, arguments[0], arguments.sublist(1).join(" "));
+main(List<String> arguments) {
+  if (arguments.isNotEmpty) {
+    var features = {
+      "open": openBible,
+      "search": searchBible,
+    };
+    var feature = features[arguments[0]];
+    var entry = arguments.sublist(1).join(" ");
+    feature(1, "KJV", entry);
+  }
 }
 
 Future loadBible(int bibleID, String bibleModule) async {
@@ -18,21 +28,33 @@ Future loadBible(int bibleID, String bibleModule) async {
     case 1:
       if ((bible1 == null) || ((bible1 != null) && (bible1.module != bibleModule))) {
         bible1 = Bible(bibleModule);
-        print("bible 1 loaded");
+        print("Bible 1 loaded");
       }
       return bible1;
       break;
     case 2:
       if ((bible2 == null) || ((bible2 != null) && (bible2.module != bibleModule))) {
         bible2 = Bible(bibleModule);
-        print("bible 2 loaded");
+        print("Bible 2 loaded");
       }
       return bible2;
       break;
   }
 }
 
+Future openBible(int bibleID, String bibleModule, String referenceString) async {
+  if (referenceString.isNotEmpty) {
+    var bible = await loadBible(bibleID, bibleModule);
+    if (bible != null) {
+      var referenceList = BibleParser("ENG").extractAllReferences(referenceString);
+      if (referenceList.isNotEmpty) bible.open(referenceList);
+    }
+  }
+}
+
 Future searchBible(int bibleID, String bibleModule, String searchString) async {
-  var bible = await loadBible(bibleID, bibleModule);
-  if (bible != null) bible.search(searchString);
+  if (searchString.isNotEmpty) {
+    var bible = await loadBible(bibleID, bibleModule);
+    if (bible != null) bible.search(searchString);
+  }
 }
