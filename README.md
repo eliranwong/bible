@@ -11,6 +11,7 @@ To develop a cross-platform mobile app
 at the moment, the command line version is taking shape.
 
 you may try commands like:
+
 "bin/main.dart open John 3:16"
 
 "bin/main.dart open John 3:16-18; Rom 5:8; 3:23, 25"
