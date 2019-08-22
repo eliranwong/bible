@@ -107,42 +107,45 @@ class Bibles {
 
     var bibleList = await this.getValidBibleList(bibleString.split("_"));
     if (bibleList.length >= 2) {
-      await this.loadBible(bibleList[0], 1);
-      await this.loadBible(bibleList[1], 2);
-
-      var referenceList = BibleParser().extractAllReferences(referenceString);
-      if (referenceList.length >= 1) {
-        var bcvList = referenceList[0];
-        versesFound += "[${BibleParser().bcvToChapterReference(bcvList)}]\n";
+      var bible1IsLoaded = await this.loadBible(bibleList[0], 1);
+	  if (bible1IsLoaded) {
+        var bible2IsLoaded = await this.loadBible(bibleList[1], 2);
+		if (bible2IsLoaded) {
+          var referenceList = BibleParser().extractAllReferences(referenceString);
+          if (referenceList.length >= 1) {
+            var bcvList = referenceList[0];
+            versesFound += "[${BibleParser().bcvToChapterReference(bcvList)}]\n";
+            
+            var b = bcvList[0];
+            var c = bcvList[1];
+            var v = bcvList[2];
         
-        var b = bcvList[0];
-        var c = bcvList[1];
-        var v = bcvList[2];
-    
-        var bible1VerseList = await this.bible1.getVerseList(b, c);
-        var vs1 = bible1VerseList[0];
-        var ve1 = bible1VerseList[(bible1VerseList.length - 1)];
-        
-        var bible2VerseList = await this.bible2.getVerseList(b, c);
-        var vs2 = bible2VerseList[0];
-        var ve2 = bible2VerseList[(bible2VerseList.length - 1)];
-        
-        var vs, ve;
-        (vs1 <= vs2) ? vs = vs1 : vs = vs2;
-        (ve1 >= ve2) ? ve = ve1 : ve = ve2;
-        
-        for (var i = vs; i <= ve; i++) {
-          var verseText1 = await this.bible1.openSingleVerse([b, c, i]);
-          var verseText2 = await this.bible2.openSingleVerse([b, c, i]);
-          if (i == v) {
-            versesFound += "**********\n[$i] [${this.bible1.module}] $verseText1\n";
-            versesFound += "[$i] [${this.bible2.module}] $verseText2\n**********";    
-          } else {
-            versesFound += "\n[$i] [${this.bible1.module}] $verseText1\n";
-            versesFound += "[$i] [${this.bible2.module}] $verseText2\n";
+            var bible1VerseList = await this.bible1.getVerseList(b, c);
+            var vs1 = bible1VerseList[0];
+            var ve1 = bible1VerseList[(bible1VerseList.length - 1)];
+            
+            var bible2VerseList = await this.bible2.getVerseList(b, c);
+            var vs2 = bible2VerseList[0];
+            var ve2 = bible2VerseList[(bible2VerseList.length - 1)];
+            
+            var vs, ve;
+            (vs1 <= vs2) ? vs = vs1 : vs = vs2;
+            (ve1 >= ve2) ? ve = ve1 : ve = ve2;
+            
+            for (var i = vs; i <= ve; i++) {
+              var verseText1 = await this.bible1.openSingleVerse([b, c, i]);
+              var verseText2 = await this.bible2.openSingleVerse([b, c, i]);
+              if (i == v) {
+                versesFound += "**********\n[$i] [${this.bible1.module}] $verseText1\n";
+                versesFound += "[$i] [${this.bible2.module}] $verseText2\n**********";    
+              } else {
+                versesFound += "\n[$i] [${this.bible1.module}] $verseText1\n";
+                versesFound += "[$i] [${this.bible2.module}] $verseText2\n";
+              }
+            }
           }
-        }
-      }
+		}
+	  }
     }
     print(versesFound);
   }
@@ -161,10 +164,14 @@ class Bibles {
   Future getCrossReference(List bcvList) async {
     var filePath = FileIOHelper().getDataPath("xRef", "xRef");
     var jsonObject = await JsonHelper().getJsonObject(filePath);
-    var referenceString = jsonObject[0]["xref"];
-    var referenceList = BibleParser().extractAllReferences(referenceString);
+    print(bcvList);
+	print(jsonObject.toList()[0]["bcv"]);
+	var searchResults = jsonObject.where((i) => (i["bcv"] == [1, 1, 1])).toList();
+	print(searchResults);
+	//var referenceString = searchResults[0]["xref"];
+    //var referenceList = BibleParser().extractAllReferences(referenceString);
 
-    return referenceList;
+    return [];
   }
 
 }
