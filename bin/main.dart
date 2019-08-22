@@ -50,8 +50,10 @@ main(List<String> arguments) {
       "search": bibles.searchBible,
       "compare": bibles.compareBibles,
       "parallel": bibles.parallelBibles,
+      "reference": bibles.crossReference,
     };
     var action = arguments[0];
+    print(action);
     if (actions.keys.contains(action.toLowerCase())) {
       var module = arguments[1];
       var entry = arguments.sublist(2).join(" ");
