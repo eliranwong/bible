@@ -1,6 +1,7 @@
 import 'dart:io'; // required by "FileIOHelper"
 import 'dart:convert'; // required by "FileIOHelper", "JsonHelper"
 import 'package:path/path.dart' as p; // required by "FileIOHelper"
+import 'config.dart' as config;
 
 class FileIOHelper {
 
@@ -8,7 +9,7 @@ class FileIOHelper {
   // Directory: https://api.dart.dev/stable/2.4.1/dart-io/Directory-class.html
 
   String getDataPath(String dataType, [String module]) {
-    var resourceFolder = "data";
+    var resourceFolder = config.resourceFolder;
     if (module == null) {
       return p.join(resourceFolder, dataType);
     } else {
