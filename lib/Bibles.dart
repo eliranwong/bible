@@ -153,8 +153,8 @@ class Bibles {
     var filePath = FileIOHelper().getDataPath("xRef", "xRef");
     var jsonObject = await JsonHelper().getJsonObject(filePath);
     var bcvString = bcvList.join(".");
-    var searchResults = jsonObject.where((i) => (i["bcv"] == bcvString)).toList();
-    var referenceString = searchResults[0]["xref"];
+    var fetchResults = jsonObject.where((i) => (i["bcv"] == bcvString)).toList();
+    var referenceString = fetchResults[0]["xref"];
     return BibleParser().extractAllReferences(referenceString);
   }
 
@@ -205,8 +205,8 @@ class Bible {
     if (this.data == null) await this.loadData();
 
     Set chapters = {};
-    var searchResults = this.data.where((i) => (i["bNo"] == b)).toList();
-    for (var i in searchResults) {
+    var fetchResults = this.data.where((i) => (i["bNo"] == b)).toList();
+    for (var i in fetchResults) {
       chapters.add(i["cNo"]);
     }
     var chapterList = chapters.toList();
@@ -218,8 +218,8 @@ class Bible {
     if (this.data == null) await this.loadData();
 
     Set verses = {};
-    var searchResults = this.data.where((i) => ((i["bNo"] == b) && (i["cNo"] == c))).toList();
-    for (var i in searchResults) {
+    var fetchResults = this.data.where((i) => ((i["bNo"] == b) && (i["cNo"] == c))).toList();
+    for (var i in fetchResults) {
       verses.add(i["vNo"]);
     }
     return verses.toList();
@@ -237,8 +237,8 @@ class Bible {
     var c = bcvList[1];
     var v = bcvList[2];
 
-    var searchResults = this.data.where((i) => ((i["bNo"] == b) && (i["cNo"] == c) && (i["vNo"] == v))).toList();
-    for (var found in searchResults) {
+    var fetchResults = this.data.where((i) => ((i["bNo"] == b) && (i["cNo"] == c) && (i["vNo"] == v))).toList();
+    for (var found in fetchResults) {
       var verseText = found["vText"].trim();
       versesFound += "$verseText";
     }
@@ -257,13 +257,13 @@ class Bible {
     var c2 = bcvList[3];
     var v2 = bcvList[4];
 
-    var check, searchResults;
+    var check, fetchResults;
 
     if ((c2 == c) && (v2 > v)) {
       check = v;
       while (check <= v2) {
-        searchResults = this.data.where((i) => ((i["bNo"] == b) && (i["cNo"] == c) && (i["vNo"] == check))).toList();
-        for (var found in searchResults) {
+        fetchResults = this.data.where((i) => ((i["bNo"] == b) && (i["cNo"] == c) && (i["vNo"] == check))).toList();
+        for (var found in fetchResults) {
           var verseText = "[${found["vNo"]}] ${found["vText"].trim()}";
           versesFound += "$verseText ";
         }
@@ -272,8 +272,8 @@ class Bible {
     } else if (c2 > c) {
       check = c;
       while (check < c2) {
-        searchResults = this.data.where((i) => ((i["bNo"] == b) && (i["cNo"] == check))).toList();
-        for (var found in searchResults) {
+        fetchResults = this.data.where((i) => ((i["bNo"] == b) && (i["cNo"] == check))).toList();
+        for (var found in fetchResults) {
           var verseText = found["vText"].trim();
           versesFound += "$verseText ";
         }
@@ -281,8 +281,8 @@ class Bible {
       }
       check = 0; // some bible versions may have chapters starting with verse 0.
       while (check <= v2) {
-        searchResults = this.data.where((i) => ((i["bNo"] == b) && (i["cNo"] == c) && (i["vNo"] == check))).toList();
-        for (var found in searchResults) {
+        fetchResults = this.data.where((i) => ((i["bNo"] == b) && (i["cNo"] == c) && (i["vNo"] == check))).toList();
+        for (var found in fetchResults) {
           var verseText = found["vText"].trim();
           versesFound += "$verseText ";
         }
@@ -297,8 +297,8 @@ class Bible {
     if (this.data == null) await this.loadData();
 
     String versesFound = "[${BibleParser().bcvToChapterReference(bcvList)}]\n";
-    var searchResults = this.data.where((i) => ((i["bNo"] == bcvList[0]) && (i["cNo"] == bcvList[1]))).toList();
-    for (var found in searchResults) {
+    var fetchResults = this.data.where((i) => ((i["bNo"] == bcvList[0]) && (i["cNo"] == bcvList[1]))).toList();
+    for (var found in fetchResults) {
       var b = found["bNo"];
       var c = found["cNo"];
       var v = found["vNo"];
@@ -329,8 +329,8 @@ class Bible {
     if (this.data == null) await this.loadData();
 
     String versesFound = "";
-    var searchResults = this.data.where((i) => (i["vText"].contains(RegExp(searchString)) as bool)).toList();
-    for (var found in searchResults) {
+    var fetchResults = this.data.where((i) => (i["vText"].contains(RegExp(searchString)) as bool)).toList();
+    for (var found in fetchResults) {
       var b = found["bNo"];
       var c = found["cNo"];
       var v = found["vNo"];
@@ -339,7 +339,7 @@ class Bible {
       versesFound += "[$bcvRef] $verseText\n\n";
     }
     print(versesFound);
-    print("$searchString is found in ${searchResults.length} verse(s).\n");
+    print("$searchString is found in ${fetchResults.length} verse(s).\n");
   }
 
 }
