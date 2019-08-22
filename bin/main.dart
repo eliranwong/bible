@@ -27,6 +27,9 @@
 /// To display chapter John 3 in "parallel" modes, with verse 16 highlighted (e.g. NET & KJV):
 /// * dart bin/main.dart parallel NET_KJV John 3:16
 /// 
+/// To display cross-"reference" verse(s) related to John 3:16 in KJV bible:
+/// * dart bin/main.dart reference KJV John 3:16
+/// 
 /// <i><b>Remarks:</b></i>
 /// * Please use "," instead of ";" to separate verses in command lines.
 /// * Common abbreviations are supported.
@@ -53,7 +56,6 @@ main(List<String> arguments) {
       "reference": bibles.crossReference,
     };
     var action = arguments[0];
-    print(action);
     if (actions.keys.contains(action.toLowerCase())) {
       var module = arguments[1];
       var entry = arguments.sublist(2).join(" ");
