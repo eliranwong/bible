@@ -10,6 +10,7 @@ To develop a set of cross-platform codes on bible tools
 To develop a command line version of bible app
 
 To develop a cross-platform mobile app
+Materials for building mobile apps are placed separately at https://github.com/eliranwong/DartBible-Flutter
 
 # progress
 The command line version is taking shape ...
