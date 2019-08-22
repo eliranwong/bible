@@ -147,6 +147,26 @@ class Bibles {
     print(versesFound);
   }
 
+  Future crossReference(String bibleString, String referenceString, [int bibleID = 1]) async {
+    var referenceList = BibleParser().extractAllReferences(referenceString);
+
+    var xRefList;
+    if (referenceList.isNotEmpty) xRefList = await this.getCrossReference(referenceList[0]);
+    if (xRefList.isNotEmpty) {
+      var bibleIsLoaded = await this.loadBible(bibleString, 1);
+      if (bibleIsLoaded) this.bible1.openMultipleVerses(xRefList);
+    }
+  }
+
+  Future getCrossReference(List bcvList) async {
+    var filePath = FileIOHelper().getDataPath("xRef", "xRef");
+    var jsonObject = await JsonHelper().getJsonObject(filePath);
+    var referenceString = jsonObject[0]["xref"];
+    var referenceList = BibleParser().extractAllReferences(referenceString);
+
+    return referenceList;
+  }
+
 }
 
 class Bible {
