@@ -1,5 +1,5 @@
 import 'Helpers.dart';
-import 'package:cli/BibleParser.dart';
+import 'BibleParser.dart';
 
 class Bibles {
 
@@ -87,7 +87,7 @@ class Bibles {
       }
       versesFound += "\n";
     }
-    print("$versesFound\n");
+    print(versesFound);
   }
 
   Future parallelBibles(String bibleString, String referenceString, [int bibleID = 1]) async {
