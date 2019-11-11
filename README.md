@@ -12,8 +12,7 @@ To develop a command line version of bible app
 To develop a cross-platform mobile app<br>
 Materials for building mobile apps are placed separately at <a href="https://github.com/eliranwong/DartBible-Flutter">https://github.com/eliranwong/DartBible-Flutter</a>
 
-# progress
-The command line version is taking shape ...
+# Manual
 
 At the moment , you may try commands like:
 
@@ -53,6 +52,12 @@ To display cross-"reference" verse(s) related to John 3:16 in KJV bible:
 * "parallel" displays a full chapter with a particular verse highlighted whereas "compare" shows particular verse(s) only.
 * "parallel" can use no more than 2 versions [at the moment] whereas "compare" can use as many as installed versions.
 * Regular expression is turned on by default for searching bibles.  Use \ to escape characters like ()[].*? .
+
+# Example - Setup in Linux / Chrome OS
+
+https://github.com/eliranwong/Chrome-OS-Linux/blob/master/unique-bible-app/command-line.md
+
+<img src="screenshot.png">
 
 # siblings
 For offline desktop version, we have:
