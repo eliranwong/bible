@@ -39,8 +39,8 @@
 /// * "parallel" can use no more than 2 versions [at the moment] whereas "compare" can use as many as installed versions.
 /// * Regular expression is turned on by default for searching bibles.  Use \ to escape characters like ()[].*? .
 
-import 'package:cli/Bibles.dart';
-import 'package:cli/config.dart' as config;
+import 'package:bible/Bibles.dart';
+import 'package:bible/config.dart' as config;
 
 var bibles;
 
