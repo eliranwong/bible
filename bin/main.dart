@@ -1,35 +1,35 @@
 /// The command line version is taking shape ...
-/// 
+///
 /// At the moment , you may try commands like:
-/// 
+///
 /// To "open" John 3:16 in KJV bible:
-/// * dart bin/main.dart open KJV John 3:16
-/// 
+/// * bible open KJV John 3:16
+///
 /// To "open" multiple verses (e.g. John 3:16-18, Rom 5:8, 3:23, 2Ti 3:14-16, Ge 1:5, 8, 13) in KJV bible:
-/// * dart bin/main.dart open KJV John 3:16-18, Rom 5:8, 3:23, 2Ti 3:14-1, Ge 1:5, 8, 13
-/// 
+/// * bible open KJV John 3:16-18, Rom 5:8, 3:23, 2Ti 3:14-1, Ge 1:5, 8, 13
+///
 /// To "search" for verses containing "Christ Jesus":
-/// * dart bin/main.dart search KJV Christ Jesus
-/// 
+/// * bible search KJV Christ Jesus
+///
 /// To "search" with standard regular expressions, e.g.:
-/// * dart bin/main.dart search KJV Christ.*?Jesus
-/// 
+/// * bible search KJV Christ.*?Jesus
+///
 /// To "compare" John 3:16 in all installed bibles:
-/// * dart bin/main.dart compare ALL John 3:16
-/// 
+/// * bible compare ALL John 3:16
+///
 /// To "compare" John 3:16 only in NET and KJV:
-/// * dart bin/main.dart compare NET_KJV John 3:16
-/// 
+/// * bible compare NET_KJV John 3:16
+///
 /// To "compare" multiple entries, e.g.:
-/// * dart bin/main.dart compare ALL John 3:16, Rom 5:8
-/// * dart bin/main.dart compare NET_KJV_WEB John 3:16, Rom 5:8
-/// 
+/// * bible compare ALL John 3:16, Rom 5:8
+/// * bible compare NET_KJV_WEB John 3:16, Rom 5:8
+///
 /// To display chapter John 3 in "parallel" modes, with verse 16 highlighted (e.g. NET & KJV):
-/// * dart bin/main.dart parallel NET_KJV John 3:16
-/// 
+/// * bible parallel NET_KJV John 3:16
+///
 /// To display cross-"reference" verse(s) related to John 3:16 in KJV bible:
-/// * dart bin/main.dart reference KJV John 3:16
-/// 
+/// * bible reference KJV John 3:16
+///
 /// <i><b>Remarks:</b></i>
 /// * Please use "," instead of ";" to separate verses in command lines.
 /// * Common abbreviations are supported.
@@ -47,23 +47,56 @@ var bibles;
 main(List<String> arguments) {
   bibles = Bibles();
 
-  if ((arguments.isNotEmpty) && (arguments.length >= 3)) {
-    var actions = {
-      "open": bibles.openBible,
-      "search": bibles.searchBible,
-      "compare": bibles.compareBibles,
-      "parallel": bibles.parallelBibles,
-      "reference": bibles.crossReference,
-    };
-    var action = arguments[0];
-    if (actions.keys.contains(action.toLowerCase())) {
-      var module = arguments[1];
-      var entry = arguments.sublist(2).join(" ");
-      actions[action](module, entry);
+  if (arguments.isEmpty) {
+    String message = '''
+    To "open" John 3:16 in KJV bible:
+    bible open KJV John 3:16
+
+    To "open" multiple verses (e.g. John 3:16-18, Rom 5:8, 3:23, 2Ti 3:14-16, Ge 1:5, 8, 13) in KJV bible:
+    bible open KJV John 3:16-18, Rom 5:8, 3:23, 2Ti 3:14-1, Ge 1:5, 8, 13
+
+    To "search" for verses containing "Christ Jesus":
+    bible search KJV Christ Jesus
+
+    To "search" with standard regular expressions, e.g.:
+    bible search KJV Christ.*?Jesus
+
+    To "compare" John 3:16 in all installed bibles:
+    bible compare ALL John 3:16
+
+    To "compare" John 3:16 only in NET and KJV:
+    bible compare NET_KJV John 3:16
+
+    To "compare" multiple entries, e.g.:
+    bible compare ALL John 3:16, Rom 5:8
+    bible compare NET_KJV_WEB John 3:16, Rom 5:8
+
+    To display chapter John 3 in "parallel" modes, with verse 16 highlighted (e.g. NET & KJV):
+    bible parallel NET_KJV John 3:16
+
+    To display cross-"reference" verse(s) related to John 3:16 in KJV bible:
+    bible reference KJV John 3:16
+    ''';
+    print(message);
+  } else {
+    if (arguments.length >= 3) {
+      var actions = {
+        "open": bibles.openBible,
+        "search": bibles.searchBible,
+        "compare": bibles.compareBibles,
+        "parallel": bibles.parallelBibles,
+        "reference": bibles.crossReference,
+      };
+      var action = arguments[0];
+      if (actions.keys.contains(action.toLowerCase())) {
+        var module = arguments[1];
+        var entry = arguments.sublist(2).join(" ");
+        actions[action](module, entry);
+      } else {
+        bibles.openBible(config.bible1, arguments.join(" "));
+      }
     } else {
       bibles.openBible(config.bible1, arguments.join(" "));
     }
-  } else {
-    bibles.openBible(config.bible1, arguments.join(" "));
   }
 }
