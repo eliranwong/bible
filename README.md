@@ -59,9 +59,9 @@ To display cross-"reference" verse(s) related to John 3:16 in KJV bible:
 
 It means you can use it directly on Windows, macOS and Linux, without installation.
 
-[files will be uploaded soon.]
+Read the following example.
 
-# Example - Customisation in Linux / Chrome OS
+# Example - Setup in Linux / Chrome OS
 
 https://github.com/eliranwong/Chrome-OS-Linux/blob/master/unique-bible-app/command-line.md
 
