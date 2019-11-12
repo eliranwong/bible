@@ -1,4 +1,4 @@
-# DartBible
+# Bible (formerly known as DartBible project)
 A simple cross-platform command line tool for reading, searching, comparing and studying bibles.
 
 Bible Tools written in <a href="dart.dev">Dart programming language</a>.
