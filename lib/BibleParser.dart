@@ -2,6 +2,280 @@ import 'config.dart' as config;
 import 'Helpers.dart';
 
 class BibleParser {
+  Map<String, String> standardBookname = {};
+
+  Map<String, String> standardBooknameENG = {
+    "1": "Genesis",
+    "2": "Exodus",
+    "3": "Leviticus",
+    "4": "Numbers",
+    "5": "Deuteronomy",
+    "6": "Joshua",
+    "7": "Judges",
+    "8": "Ruth",
+    "9": "1 Samuel",
+    "10": "2 Samuel",
+    "11": "1Kings",
+    "12": "2Kings",
+    "13": "1 Chronicles",
+    "14": "2 Chronicles",
+    "15": "Ezra",
+    "16": "Nehemiah",
+    "17": "Esther",
+    "18": "Job",
+    "19": "Psalms",
+    "20": "Proverbs",
+    "21": "Ecclesiastes",
+    "22": "Song of Songs",
+    "23": "Isaiah",
+    "24": "Jeremiah",
+    "25": "Lamentations",
+    "26": "Ezekiel",
+    "27": "Daniel",
+    "28": "Hosea",
+    "29": "Joel",
+    "30": "Amos",
+    "31": "Obadiah",
+    "32": "Jonah",
+    "33": "Micah",
+    "34": "Nahum",
+    "35": "Habakkuk",
+    "36": "Zephaniah",
+    "37": "Haggai",
+    "38": "Zechariah",
+    "39": "Malachi",
+    "40": "Matthew",
+    "41": "Mark",
+    "42": "Luke",
+    "43": "John",
+    "44": "Acts",
+    "45": "Romans",
+    "46": "1 Corinthians",
+    "47": "2 Corinthians",
+    "48": "Galatians",
+    "49": "Ephesians",
+    "50": "Philippians",
+    "51": "Colossians",
+    "52": "1 Thessalonians",
+    "53": "2 Thessalonians",
+    "54": "1 Timothy",
+    "55": "2 Timothy",
+    "56": "Titus",
+    "57": "Philemon",
+    "58": "Hebrews",
+    "59": "James",
+    "60": "1 Peter",
+    "61": "2 Peter",
+    "62": "1 John",
+    "63": "2 John",
+    "64": "3 John",
+    "65": "Jude",
+    "66": "Revelation",
+    "70": "Baruch",
+    "71": "Additions to Daniel",
+    "72": "Prayer of Azariah",
+    "73": "Bel and the Dragon",
+    "75": "Susanna",
+    "76": "1 Esdras",
+    "77": "2 Esdras",
+    "78": "Additions to Esther",
+    "79": "Letter of Jeremiah",
+    "80": "Judith",
+    "81": "1 Maccabees",
+    "82": "2 Maccabees",
+    "83": "3 Maccabees",
+    "84": "4 Maccabees",
+    "85": "Prayer of Manasseh",
+    "86": "Psalm 151",
+    "87": "Sirach",
+    "88": "Tobit",
+    "89": "Wisdom of Solomon",
+    "90": "Psalms of Solomon",
+    "91": "Odes",
+    "92": "Epistle to Laodiceans",
+  };
+
+  Map<String, String> standardBooknameTC = {
+    "1": "創世記",
+    "2": "出埃及記",
+    "3": "利未記",
+    "4": "民數記",
+    "5": "申命記",
+    "6": "約書亞記",
+    "7": "士師記",
+    "8": "路得記",
+    "9": "撒母耳記上",
+    "10": "撒母耳記下",
+    "11": "列王紀上",
+    "12": "列王紀下",
+    "13": "歷代志上",
+    "14": "歷代志下",
+    "15": "以斯拉記",
+    "16": "尼希米記",
+    "17": "以斯帖記",
+    "18": "約伯記",
+    "19": "詩篇",
+    "20": "箴言",
+    "21": "傳道書",
+    "22": "雅歌",
+    "23": "以賽亞書",
+    "24": "耶利米書",
+    "25": "耶利米哀歌",
+    "26": "以西結書",
+    "27": "但以理書",
+    "28": "何西阿書",
+    "29": "約珥書",
+    "30": "阿摩司書",
+    "31": "俄巴底亞書",
+    "32": "約拿書",
+    "33": "彌迦書",
+    "34": "那鴻書",
+    "35": "哈巴谷書",
+    "36": "西番雅書",
+    "37": "哈該書",
+    "38": "撒迦利亞書",
+    "39": "瑪拉基書",
+    "40": "馬太福音",
+    "41": "馬可福音",
+    "42": "路加福音",
+    "43": "約翰福音",
+    "44": "使徒行傳",
+    "45": "羅馬書",
+    "46": "哥林多前書",
+    "47": "哥林多後書",
+    "48": "加拉太書",
+    "49": "以弗所書",
+    "50": "腓利比書",
+    "51": "歌羅西書",
+    "52": "帖撒羅尼迦前書",
+    "53": "帖撒羅尼迦後書",
+    "54": "提摩太前書",
+    "55": "提摩太後書",
+    "56": "提多書",
+    "57": "腓利門書",
+    "58": "希伯來書",
+    "59": "雅各書",
+    "60": "彼得前書",
+    "61": "彼得後書",
+    "62": "約翰壹書",
+    "63": "約翰貳書",
+    "64": "約翰參書",
+    "65": "猶大書",
+    "66": "啟示錄",
+    "70": "巴錄書",
+    "71": "但以理書補編",
+    "72": "三童歌",
+    "73": "比勒與大龍",
+    "75": "蘇撒拿傳",
+    "76": "以斯拉續篇上卷",
+    "77": "以斯拉續篇下卷",
+    "78": "以斯帖記補編",
+    "79": "耶利米書信",
+    "80": "猶滴傳",
+    "81": "馬加比一書",
+    "82": "馬加比二書",
+    "83": "馬加比三書",
+    "84": "馬加比四書",
+    "85": "瑪拿西禱言",
+    "86": "詩篇一五一",
+    "87": "便西拉智訓",
+    "88": "多比傳",
+    "89": "所羅門智訓",
+    "90": "所羅門詩篇",
+    "91": "頌歌",
+    "92": "老底嘉書",
+  };
+
+  Map<String, String> standardBooknameSC = {
+    "1": "创世记",
+    "2": "出埃及记",
+    "3": "利未记",
+    "4": "民数记",
+    "5": "申命记",
+    "6": "约书亚记",
+    "7": "士师记",
+    "8": "路得记",
+    "9": "撒母耳记上",
+    "10": "撒母耳记下",
+    "11": "列王纪上",
+    "12": "列王纪下",
+    "13": "历代志上",
+    "14": "历代志下",
+    "15": "以斯拉记",
+    "16": "尼希米记",
+    "17": "以斯帖记",
+    "18": "约伯记",
+    "19": "诗篇",
+    "20": "箴言",
+    "21": "传道书",
+    "22": "雅歌",
+    "23": "以赛亚书",
+    "24": "耶利米书",
+    "25": "耶利米哀歌",
+    "26": "以西结书",
+    "27": "但以理书",
+    "28": "何西阿书",
+    "29": "约珥书",
+    "30": "阿摩司书",
+    "31": "俄巴底亚书",
+    "32": "约拿书",
+    "33": "弥迦书",
+    "34": "那鸿书",
+    "35": "哈巴谷书",
+    "36": "西番雅书",
+    "37": "哈该书",
+    "38": "撒迦利亚书",
+    "39": "玛拉基书",
+    "40": "马太福音",
+    "41": "马可福音",
+    "42": "路加福音",
+    "43": "约翰福音",
+    "44": "使徒行传",
+    "45": "罗马书",
+    "46": "哥林多前书",
+    "47": "哥林多后书",
+    "48": "加拉太书",
+    "49": "以弗所书",
+    "50": "腓利比书",
+    "51": "歌罗西书",
+    "52": "帖撒罗尼迦前书",
+    "53": "帖撒罗尼迦后书",
+    "54": "提摩太前书",
+    "55": "提摩太后书",
+    "56": "提多书",
+    "57": "腓利门书",
+    "58": "希伯来书",
+    "59": "雅各书",
+    "60": "彼得前书",
+    "61": "彼得后书",
+    "62": "约翰壹书",
+    "63": "约翰贰书",
+    "64": "约翰参书",
+    "65": "犹大书",
+    "66": "启示录",
+    "70": "巴录书",
+    "71": "但以理书补编",
+    "72": "三童歌",
+    "73": "比勒与大龙",
+    "75": "苏撒拿传",
+    "76": "以斯拉续篇上卷",
+    "77": "以斯拉续篇下卷",
+    "78": "以斯帖记补编",
+    "79": "耶利米书信",
+    "80": "犹滴传",
+    "81": "马加比一书",
+    "82": "马加比二书",
+    "83": "马加比三书",
+    "84": "马加比四书",
+    "85": "玛拿西祷言",
+    "86": "诗篇一五一",
+    "87": "便西拉智训",
+    "88": "多比传",
+    "89": "所罗门智训",
+    "90": "所罗门诗篇",
+    "91": "颂歌",
+    "92": "老底嘉书",
+  };
 
   Map<String, String> standardAbbreviation = {};
 
@@ -164,14 +438,14 @@ class BibleParser {
     "64": "約三",
     "65": "猶",
     "66": "啟",
-    "70": "Bar",
-    "71": "AddDan",
+    "70": "巴錄書",
+    "71": "但以理書補編",
     "72": "三童歌",
     "73": "比勒與大龍",
     "75": "蘇撒拿傳",
     "76": "以斯拉續篇上卷",
     "77": "以斯拉續篇下卷",
-    "78": "以斯帖補編",
+    "78": "以斯帖記補編",
     "79": "耶利米書信",
     "80": "猶滴傳",
     "81": "馬加比一書",
@@ -183,9 +457,9 @@ class BibleParser {
     "87": "便西拉智訓",
     "88": "多比傳",
     "89": "所羅門智訓",
-    "90": "PssSol",
-    "91": "Odes",
-    "92": "EpLao",
+    "90": "所羅門詩篇",
+    "91": "頌歌",
+    "92": "老底嘉書",
   };
 
   Map<String, String> standardAbbreviationSC = {
@@ -255,14 +529,14 @@ class BibleParser {
     "64": "约三",
     "65": "犹",
     "66": "启",
-    "70": "Bar",
-    "71": "AddDan",
+    "70": "巴录书",
+    "71": "但以理书补编",
     "72": "三童歌",
     "73": "比勒与大龙",
     "75": "苏撒拿传",
     "76": "以斯拉续篇上卷",
     "77": "以斯拉续篇下卷",
-    "78": "以斯帖补编",
+    "78": "以斯帖记补编",
     "79": "耶利米书信",
     "80": "犹滴传",
     "81": "马加比一书",
@@ -274,13 +548,13 @@ class BibleParser {
     "87": "便西拉智训",
     "88": "多比传",
     "89": "所罗门智训",
-    "90": "PssSol",
-    "91": "Odes",
-    "92": "EpLao",
+    "90": "所罗门诗篇",
+    "91": "颂歌",
+    "92": "老底嘉书",
   };
 
   // mapping bible book abbreviation / bible book name to book number
-  Map<String, String> marvelBibleBookNo = {
+  Map<String, String> bibleBookNo = {
     "Ge.": "1",
     "Gen.": "1",
     "GEN.": "1",
@@ -1664,6 +1938,13 @@ class BibleParser {
       "SC": this.standardAbbreviationSC,
     };
     this.standardAbbreviation = standardAbbreviations[config.abbreviations];
+    // set standard book name
+    var standardBookNameMap = {
+      "ENG": this.standardBooknameENG,
+      "TC": this.standardBooknameTC,
+      "SC": this.standardBooknameSC,
+    };
+    this.standardBookname = standardBookNameMap[config.abbreviations];
   }
 
   // function for converting b c v integers to verse reference string
@@ -1703,13 +1984,12 @@ class BibleParser {
   }
 
   String parseText(String text) {
-
     // setup regexHelper
-    var regex = RegexHelper();
+    RegexHelper regex = RegexHelper();
 
     // add a space at the end of the text, to avoid indefinite loop in later steps
     // this extra space will be removed when parsing is finished.
-    var taggedText = "$text ";
+    String taggedText = "$text ";
 
     // remove bcv tags, if any, to avoid duplication of tagging in later steps
     regex.patternString = r'<ref onclick="bcv\([^\(\)]*?\)">(.*?)</ref>';
@@ -1723,7 +2003,7 @@ class BibleParser {
 
     // search for books; mark them with book numbers, used by https://marvel.bible
     // sorting books by alphabet
-    var sortedBooks = this.marvelBibleBookNo.keys.toList()..sort();
+    var sortedBooks = this.bibleBookNo.keys.toList()..sort();
     // sorting books by length
     sortedBooks.sort((a, b) => b.length.compareTo(a.length));
 
@@ -1740,24 +2020,36 @@ class BibleParser {
       bookString = regex.doSearchReplace(bookString);
 
       // get assigned book number from dictionary
-      var booknumber = this.marvelBibleBookNo[book];
+      var bookNumber = this.bibleBookNo[book];
 
       // search & replace for marking book
       regex.searchReplace = [
-        ['($bookString) ([0-9])', '『$booknumber｜\\1』 \\2'],
+        ['($bookString) ([0-9])', '『$bookNumber｜\\1』 \\2'],
       ];
       taggedText = regex.doSearchReplace(taggedText, multiLine: true);
     }
 
     regex.searchReplace = [
       // add first set of taggings:
-      ['『([0-9]+?)｜([^『』]*?)』 ([0-9]+?):([0-9]+?)([^0-9])', r'<ref onclick="bcv(\1,\3,\4)">\2 \3:\4</ref｝\5'],
-      ['『([0-9]+?)｜([^『』]*?)』 ([0-9]+?)([^0-9])', r'<ref onclick="bcv(\1,\3,)">\2 \3</ref｝\4'],
+      [
+        '『([0-9]+?)｜([^『』]*?)』 ([0-9]+?):([0-9]+?)([^0-9])',
+        r'<ref onclick="bcv(\1,\3,\4)">\2 \3:\4</ref｝\5'
+      ],
+      [
+        '『([0-9]+?)｜([^『』]*?)』 ([0-9]+?)([^0-9])',
+        r'<ref onclick="bcv(\1,\3,)">\2 \3</ref｝\4'
+      ],
       // fix references without verse numbers
       // fix books with chapter 1 ONLY; oneChapterBook = [31,57,63,64,65,72,73,75,79,85]
-      [r'<ref onclick="bcv\((31|57|63|64|65|72|73|75|79|85),([0-9]+?),\)">', r'<ref onclick="bcv(\1,1,\2)">'],
+      [
+        r'<ref onclick="bcv\((31|57|63|64|65|72|73|75|79|85),([0-9]+?),\)">',
+        r'<ref onclick="bcv(\1,1,\2)">'
+      ],
       // fix references of chapters without verse number; assign verse number 1 in taggings
-      [r'<ref onclick="bcv\(([0-9]+?),([0-9]+?),\)">', r'<ref onclick="bcv(\1,\2,1)">＊'],
+      [
+        r'<ref onclick="bcv\(([0-9]+?),([0-9]+?),\)">',
+        r'<ref onclick="bcv(\1,\2,1)">＊'
+      ],
     ];
     taggedText = regex.doSearchReplace(taggedText, multiLine: true);
 
@@ -1765,11 +2057,26 @@ class BibleParser {
     regex.searchPattern = RegExp('</ref｝[,-–;][ ]*?[0-9]', multiLine: true);
     while (regex.searchPattern.hasMatch(taggedText)) {
       regex.searchReplace = [
-        [r'<ref onclick="bcv\(([0-9]+?),([0-9]+?),([0-9]+?)\)">([^｝]*?)</ref｝([,-–;][ ]*?)([0-9]+?):([0-9]+?)([^0-9])', r'<ref onclick="bcv(\1,\2,\3)">\4</ref｝\5<ref onclick="bcv(\1,\6,\7)">\6:\7</ref｝\8'],
-        [r'<ref onclick="bcv\(([0-9]+?),([0-9]+?),([0-9]+?)\)">([^＊][^｝]*?)</ref｝([,-–;][ ]*?)([0-9]+?)([^:0-9])', r'<ref onclick="bcv(\1,\2,\3)">\4</ref｝\5<ref onclick="bcv(\1,\2,\6)">\6</ref｝\7'],
-        [r'<ref onclick="bcv\(([0-9]+?),([0-9]+?),([0-9]+?)\)">([^＊][^｝]*?)</ref｝([,-–;][ ]*?)([0-9]+?):([^0-9])', r'<ref onclick="bcv(\1,\2,\3)">\4</ref｝\5<ref onclick="bcv(\1,\2,\6)">\6</ref｝:\7'],
-        [r'<ref onclick="bcv\(([0-9]+?),([0-9]+?),([0-9]+?)\)">(＊[^｝]*?)</ref｝([,-–;][ ]*?)([0-9]+?)([^:0-9])', r'<ref onclick="bcv(\1,\2,\3)">\4</ref｝\5<ref onclick="bcv(\1,\6,1)">＊\6</ref｝\7'],
-        [r'<ref onclick="bcv\(([0-9]+?),([0-9]+?),([0-9]+?)\)">(＊[^｝]*?)</ref｝([,-–;][ ]*?)([0-9]+?):([^0-9])', r'<ref onclick="bcv(\1,\2,\3)">\4</ref｝\5<ref onclick="bcv(\1,\6,1)">＊\6</ref｝:\7'],
+        [
+          r'<ref onclick="bcv\(([0-9]+?),([0-9]+?),([0-9]+?)\)">([^｝]*?)</ref｝([,-–;][ ]*?)([0-9]+?):([0-9]+?)([^0-9])',
+          r'<ref onclick="bcv(\1,\2,\3)">\4</ref｝\5<ref onclick="bcv(\1,\6,\7)">\6:\7</ref｝\8'
+        ],
+        [
+          r'<ref onclick="bcv\(([0-9]+?),([0-9]+?),([0-9]+?)\)">([^＊][^｝]*?)</ref｝([,-–;][ ]*?)([0-9]+?)([^:0-9])',
+          r'<ref onclick="bcv(\1,\2,\3)">\4</ref｝\5<ref onclick="bcv(\1,\2,\6)">\6</ref｝\7'
+        ],
+        [
+          r'<ref onclick="bcv\(([0-9]+?),([0-9]+?),([0-9]+?)\)">([^＊][^｝]*?)</ref｝([,-–;][ ]*?)([0-9]+?):([^0-9])',
+          r'<ref onclick="bcv(\1,\2,\3)">\4</ref｝\5<ref onclick="bcv(\1,\2,\6)">\6</ref｝:\7'
+        ],
+        [
+          r'<ref onclick="bcv\(([0-9]+?),([0-9]+?),([0-9]+?)\)">(＊[^｝]*?)</ref｝([,-–;][ ]*?)([0-9]+?)([^:0-9])',
+          r'<ref onclick="bcv(\1,\2,\3)">\4</ref｝\5<ref onclick="bcv(\1,\6,1)">＊\6</ref｝\7'
+        ],
+        [
+          r'<ref onclick="bcv\(([0-9]+?),([0-9]+?),([0-9]+?)\)">(＊[^｝]*?)</ref｝([,-–;][ ]*?)([0-9]+?):([^0-9])',
+          r'<ref onclick="bcv(\1,\2,\3)">\4</ref｝\5<ref onclick="bcv(\1,\6,1)">＊\6</ref｝:\7'
+        ],
       ];
       taggedText = regex.doSearchReplace(taggedText, multiLine: true);
     }
@@ -1786,7 +2093,8 @@ class BibleParser {
     // e.g. John 3:16 is tagged as <ref onclick="bcv(43,3,16)">John 3:16</ref>
     // e.g. John 3:14-16 is tagged as <ref onclick="bcv(43,3,14,3,16)">John 3:14-16</ref>
     // e.g. John 3:14-4:3 is tagged as <ref onclick="bcv(43,3,14,4,3)">John 3:14-4:3</ref>
-    regex.patternString = r'<ref onclick="bcv\(([0-9]+?),([0-9]+?),([0-9]+?)\)">([^<>]*?)</ref>([-–])<ref onclick="bcv\(\1,([0-9]+?),([0-9]+?)\)">';
+    regex.patternString =
+        r'<ref onclick="bcv\(([0-9]+?),([0-9]+?),([0-9]+?)\)">([^<>]*?)</ref>([-–])<ref onclick="bcv\(\1,([0-9]+?),([0-9]+?)\)">';
     regex.searchPattern = RegExp(regex.patternString, multiLine: true);
     while (regex.searchPattern.hasMatch(taggedText)) {
       regex.searchReplace = [
@@ -1796,7 +2104,7 @@ class BibleParser {
     }
 
     // remove the extra space, added at the beginning of this function
-    taggedText = taggedText.substring(0, (taggedText.length -1));
+    taggedText = taggedText.substring(0, (taggedText.length - 1));
 
     return taggedText;
   }
@@ -1817,6 +2125,7 @@ class BibleParser {
     return verseReferenceList;
   }
 
+  /*
   Future tagFiles(List filePaths) async {
     var fileIO = FileIOHelper();
     for (var filePath in filePaths) {
@@ -1833,5 +2142,6 @@ class BibleParser {
     var fileList = await FileIOHelper().getFileListInFolder(folderPath);
     this.tagFiles(fileList);
   }
+  */
 
 }
