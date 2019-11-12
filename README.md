@@ -1,7 +1,9 @@
 # DartBible
+A simple cross-platform command line tool for reading, searching, comparing and studying bibles.
+
 Bible Tools written in <a href="dart.dev">Dart programming language</a>.
 
-Developed from version 2.4.0
+Developed from Dart version 2.4.0
 
 # aim
 To develop a set of cross-platform codes on bible tools
@@ -9,8 +11,8 @@ To develop a set of cross-platform codes on bible tools
 # objectives
 To develop a command line version of bible app
 
-To develop a cross-platform mobile app<br>
-Materials for building mobile apps are placed separately at <a href="https://github.com/eliranwong/DartBible-Flutter">https://github.com/eliranwong/DartBible-Flutter</a>
+To develop a set of scripts for further development of mobile app:<br>
+Mobile iOS and Andriod versions are developed and shared at <a href="https://github.com/eliranwong/DartBible-Flutter">https://github.com/eliranwong/DartBible-Flutter</a>
 
 # Manual
 
