@@ -55,7 +55,13 @@ To display cross-"reference" verse(s) related to John 3:16 in KJV bible:
 * "parallel" can use no more than 2 versions [at the moment] whereas "compare" can use as many as installed versions.
 * Regular expression is turned on by default for searching bibles.  Use \ to escape characters like ()[].*? .
 
-# Example - Setup in Linux / Chrome OS
+# Standalone apps
+
+It means you can use it directly on Windows, macOS and Linux, without installation.
+
+[files will be uploaded soon.]
+
+# Example - Customisation in Linux / Chrome OS
 
 https://github.com/eliranwong/Chrome-OS-Linux/blob/master/unique-bible-app/command-line.md
 
