@@ -267,3 +267,8 @@ moreStringExamples() {
   
   print("Both single quotation mark ' and double quotation mark ${'"'} in a single string");
 }
+
+reMapAMap() {
+  Map a = {"a": "1", "b": "2"};
+  print({for (MapEntry i in a.entries) i.value: i.key});
+}
